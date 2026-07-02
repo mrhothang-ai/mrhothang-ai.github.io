@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Khảo Sát Hài Lòng Chính Sách Nhân Sự – IL-Sung Tech</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --ils-navy:       #1A4F8A;
+  --ils-navy-dark:  #0F3460;
+  --ils-accent:     #F59E0B;
+  --ils-success:    #16A34A;
+  --ils-danger:     #DC2626;
+  --ils-bg:         #F0F4F8;
+  --ils-surface:    #FFFFFF;
+  --ils-border:     #CBD5E1;
+  --ils-text:       #1E293B;
+  --ils-muted:      #64748B;
+  --app-color:      #1A4F8A;
+  --app-color-dark: #0F3460;
+}
+body {
+  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--ils-bg); color: var(--ils-text);
+  font-size: 15px; line-height: 1.6; min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* TOPBAR */
+.ils-topbar {
+  background: var(--app-color); padding: 10px 20px;
+  display: flex; align-items: center; justify-content: space-between;
+  position: sticky; top: 0; z-index: 100;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+.ils-topbar-brand { display: flex; align-items: center; gap: 10px; }
+.ils-topbar-logo {
+  background: rgba(255,255,255,0.15); border-radius: 6px;
+  padding: 4px 10px; color: #fff; font-weight: 900; font-size: 13px; letter-spacing: 0.05em;
+}
+.ils-topbar-sep { width: 1px; height: 20px; background: rgba(255,255,255,0.25); }
+.ils-topbar-dept { color: rgba(255,255,255,0.85); font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; }
+.ils-topbar-code { color: rgba(255,255,255,0.45); font-size: 11px; font-family: monospace; }
+
+/* INTRO */
+.ils-intro {
+  min-height: 100vh;
+  background: linear-gradient(145deg, var(--app-color) 0%, var(--app-color-dark) 100%);
+  display: flex; align-items: center; justify-content: center; padding: 24px;
+}
+.ils-intro-card {
+  max-width: 520px; width: 100%;
+  background: rgba(255,255,255,0.1); border-radius: 20px; padding: 44px 36px;
+  text-align: center; backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,0.15);
+}
+.ils-intro-icon { font-size: 52px; margin-bottom: 16px; }
+.ils-intro-brand {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(255,255,255,0.12); border-radius: 20px;
+  padding: 5px 14px; margin-bottom: 16px;
+}
+.ils-intro-brand span { color: #fff; font-size: 12px; }
+.ils-intro-brand .n { font-weight: 800; letter-spacing: 0.08em; }
+.ils-intro-brand .s { opacity: 0.4; }
+.ils-intro-brand .d { opacity: 0.7; }
+.ils-intro-title { color: #fff; font-size: 23px; font-weight: 800; line-height: 1.3; margin-bottom: 10px; }
+.ils-intro-desc  { color: rgba(255,255,255,0.75); font-size: 14px; line-height: 1.75; margin-bottom: 24px; }
+.ils-intro-meta  {
+  background: rgba(255,255,255,0.08); border-radius: 12px;
+  padding: 14px 18px; margin-bottom: 26px; text-align: left;
+}
+.ils-intro-meta-row {
+  display: flex; align-items: center; gap: 10px;
+  color: #fff; margin-bottom: 9px; font-size: 13px;
+}
+.ils-intro-meta-row:last-child { margin-bottom: 0; }
+.ils-intro-meta-row .icon  { width: 20px; text-align: center; font-size: 15px; flex-shrink: 0; }
+.ils-intro-meta-row .lbl   { opacity: 0.6; min-width: 120px; font-size: 12px; }
+.ils-intro-meta-row .val   { font-weight: 600; }
+.ils-formcode { font-size: 11px; color: rgba(255,255,255,0.35); font-family: monospace; margin-top: 18px; }
+
+/* PROGRESS */
+.ils-progress { max-width: 720px; margin: 0 auto 20px; padding: 20px 20px 0; }
+.ils-progress-steps { display: flex; align-items: flex-start; justify-content: center; }
+.ils-ps-item { display: flex; flex-direction: column; align-items: center; }
+.ils-ps-circle {
+  width: 34px; height: 34px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 800; font-size: 13px; flex-shrink: 0;
+}
+.ils-ps-label { font-size: 11px; margin-top: 5px; font-weight: 600; white-space: nowrap; }
+.ils-ps-line  { height: 2px; width: 72px; margin: 17px 3px 0; }
+@media(max-width:480px) { .ils-ps-line { width: 28px; } .ils-ps-label { font-size: 9px; } }
+
+/* SCREEN */
+.ils-screen { display: none; padding: 0 16px 56px; }
+.ils-screen.active { display: block; }
+.ils-screen-inner { max-width: 720px; margin: 0 auto; padding-top: 20px; }
+
+/* CARD */
+.ils-card {
+  background: var(--ils-surface); border-radius: 14px;
+  border: 1.5px solid var(--ils-border); overflow: hidden;
+  margin-bottom: 18px; box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+}
+.ils-card-header {
+  background: var(--app-color); padding: 11px 18px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.ils-card-header-title { color: #fff; font-weight: 700; font-size: 14px; }
+.ils-card-body { padding: 18px 20px; }
+
+/* FIELDS */
+.ils-field { margin-bottom: 16px; }
+.ils-field:last-child { margin-bottom: 0; }
+.ils-label {
+  display: block; font-size: 12px; font-weight: 700;
+  color: var(--ils-muted); text-transform: uppercase;
+  letter-spacing: 0.05em; margin-bottom: 6px;
+}
+.ils-label-sub { display: block; font-size: 11px; font-weight: 400; color: #94A3B8; text-transform: none; letter-spacing: 0; margin-top: 1px; }
+.ils-req { color: var(--ils-danger); }
+.ils-input, .ils-select, .ils-textarea {
+  width: 100%; padding: 10px 12px;
+  border: 1.5px solid var(--ils-border); border-radius: 8px;
+  font-size: 14px; color: var(--ils-text);
+  font-family: inherit; outline: none; background: #fff;
+  transition: border-color .15s; -webkit-appearance: none; appearance: none;
+}
+.ils-input:focus, .ils-select:focus, .ils-textarea:focus { border-color: var(--app-color); box-shadow: 0 0 0 3px rgba(26,79,138,0.1); }
+.ils-textarea { resize: vertical; line-height: 1.6; }
+.ils-select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%2364748B' d='M6 8L0 0h12z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 12px center; padding-right: 36px;
+}
+.ils-field-err { color: var(--ils-danger); font-size: 12px; margin-top: 4px; display: none; }
+.ils-field.has-err .ils-input,
+.ils-field.has-err .ils-select { border-color: var(--ils-danger); }
+.ils-field.has-err .ils-field-err { display: block; }
+
+/* GRID */
+.ils-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+@media(max-width:560px) { .ils-grid-2 { grid-template-columns: 1fr; } }
+
+/* RATING STARS */
+.rating-group { display: flex; gap: 8px; flex-wrap: wrap; }
+.rating-btn {
+  flex: 1; min-width: 52px; padding: 10px 6px;
+  border: 1.5px solid var(--ils-border); border-radius: 10px;
+  background: #fff; cursor: pointer; text-align: center;
+  font-family: inherit; transition: all .15s;
+}
+.rating-btn:hover { border-color: var(--app-color); background: #EFF6FF; }
+.rating-btn.selected { border-color: var(--app-color); background: var(--app-color); color: #fff; }
+.rating-btn .score { font-size: 18px; font-weight: 900; display: block; line-height: 1; }
+.rating-btn .lbl   { font-size: 10px; display: block; margin-top: 3px; line-height: 1.2; opacity: 0.85; }
+.rating-btn.selected .lbl { opacity: 1; }
+
+/* Màu rating */
+.rating-btn[data-v="1"]:not(.selected) { border-color: #FECACA; }
+.rating-btn[data-v="1"].selected { background: #DC2626; border-color: #DC2626; }
+.rating-btn[data-v="2"]:not(.selected) { border-color: #FED7AA; }
+.rating-btn[data-v="2"].selected { background: #EA580C; border-color: #EA580C; }
+.rating-btn[data-v="3"]:not(.selected) { border-color: #FDE68A; }
+.rating-btn[data-v="3"].selected { background: #D97706; border-color: #D97706; }
+.rating-btn[data-v="4"]:not(.selected) { border-color: #BBF7D0; }
+.rating-btn[data-v="4"].selected { background: #16A34A; border-color: #16A34A; }
+.rating-btn[data-v="5"]:not(.selected) { border-color: #A7F3D0; }
+.rating-btn[data-v="5"].selected { background: #059669; border-color: #059669; }
+
+.rating-field-err { color: var(--ils-danger); font-size: 12px; margin-top: 6px; display: none; }
+.rating-wrap.has-err .rating-field-err { display: block; }
+.rating-wrap.has-err .rating-btn { border-color: #FECACA; }
+.rating-wrap.has-err .rating-btn.selected { border-color: var(--ils-danger) !important; }
+
+/* POLICY CARD */
+.policy-card {
+  background: #F8FAFC; border: 1.5px solid var(--ils-border);
+  border-radius: 12px; padding: 16px 18px; margin-bottom: 14px;
+}
+.policy-card:last-child { margin-bottom: 0; }
+.policy-title {
+  font-size: 14px; font-weight: 700; color: var(--ils-text);
+  margin-bottom: 4px; display: flex; align-items: center; gap: 8px;
+}
+.policy-desc { font-size: 12px; color: var(--ils-muted); margin-bottom: 12px; line-height: 1.5; }
+
+/* PROFILE BANNER */
+.ils-profile-banner {
+  background: var(--ils-surface); border-radius: 12px;
+  border: 1.5px solid var(--ils-border); padding: 12px 18px;
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 18px; flex-wrap: wrap; gap: 10px;
+}
+.ils-avatar {
+  width: 40px; height: 40px; border-radius: 50%;
+  background: var(--app-color); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 800; font-size: 16px; flex-shrink: 0;
+}
+.ils-profile-name { font-weight: 700; font-size: 14px; }
+.ils-profile-sub  { font-size: 12px; color: var(--ils-muted); }
+
+/* NOTICE */
+.ils-notice {
+  border-radius: 10px; padding: 12px 16px; font-size: 13px;
+  line-height: 1.6; margin-bottom: 16px;
+  display: flex; align-items: flex-start; gap: 10px;
+}
+.ils-notice.info { background: #EFF6FF; border: 1.5px solid #BFDBFE; color: #1E40AF; }
+.ils-notice.warning { background: #FFFBEB; border: 1.5px solid #FDE68A; color: #92400E; }
+
+/* BUTTONS */
+.ils-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+  padding: 11px 22px; border-radius: 10px; border: none;
+  font-size: 14px; font-weight: 700; cursor: pointer;
+  font-family: inherit; transition: all .15s; white-space: nowrap;
+}
+.ils-btn:active { transform: scale(0.97); }
+.ils-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.ils-btn-primary { background: var(--app-color); color: #fff; }
+.ils-btn-success { background: var(--ils-success); color: #fff; }
+.ils-btn-accent  { background: var(--ils-accent); color: #1a1a1a; }
+.ils-btn-outline { background: none; border: 1.5px solid var(--ils-border); color: var(--ils-muted); }
+.ils-btn-full { width: 100%; }
+.ils-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; gap: 12px; }
+
+/* DONE */
+.ils-done {
+  min-height: 100vh;
+  background: linear-gradient(145deg, var(--ils-success), #064E3B);
+  display: flex; align-items: center; justify-content: center; padding: 24px;
+}
+.ils-done-card { max-width: 440px; width: 100%; text-align: center; color: #fff; }
+.ils-done-icon  { font-size: 64px; margin-bottom: 14px; }
+.ils-done-title { font-size: 23px; font-weight: 800; margin-bottom: 10px; }
+.ils-done-desc  { font-size: 14px; opacity: 0.85; line-height: 1.8; margin-bottom: 24px; }
+
+/* TOAST */
+#ils-toast {
+  position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(8px);
+  background: #1E293B; color: #fff; padding: 11px 22px;
+  border-radius: 50px; font-size: 13px; font-weight: 600;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+  opacity: 0; transition: opacity .25s, transform .25s;
+  pointer-events: none; z-index: 9999; white-space: nowrap;
+}
+#ils-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+@media(max-width:480px) {
+  .ils-intro-card { padding: 30px 18px; }
+  .ils-card-body { padding: 14px 16px; }
+  .rating-btn .lbl { display: none; }
+  .rating-btn .score { font-size: 20px; }
+}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="ils-topbar" id="ils-topbar" style="display:none;">
+  <div class="ils-topbar-brand">
+    <span class="ils-topbar-logo">IL-Sung Tech</span>
+    <span class="ils-topbar-sep"></span>
+    <span class="ils-topbar-dept">HR – Nhân Sự</span>
+  </div>
+  <span class="ils-topbar-code">HR-002-2025</span>
+</div>
+
+<!-- ══ INTRO ══ -->
+<div class="ils-intro" id="screen-intro">
+  <div class="ils-intro-card">
+    <div class="ils-intro-icon">🌟</div>
+    <div class="ils-intro-brand">
+      <span class="n">IL-SUNG TECH</span>
+      <span class="s">·</span>
+      <span class="d">HR – Nhân Sự</span>
+    </div>
+    <h1 class="ils-intro-title">Khảo Sát Hài Lòng<br>Chính Sách Nhân Sự</h1>
+    <p class="ils-intro-desc">
+      Ý kiến của bạn giúp nhà máy cải thiện các chính sách tốt hơn trong thời gian tới.
+      Tất cả phản hồi đều được bảo mật và tổng hợp ẩn danh.
+    </p>
+    <div class="ils-intro-meta">
+      <div class="ils-intro-meta-row">
+        <span class="icon">⏱</span><span class="lbl">Thời gian</span><span class="val">5 – 8 phút</span>
+      </div>
+      <div class="ils-intro-meta-row">
+        <span class="icon">📅</span><span class="lbl">Kỳ khảo sát</span><span class="val">Tháng 6/2025</span>
+      </div>
+      <div class="ils-intro-meta-row">
+        <span class="icon">🔒</span><span class="lbl">Bảo mật</span><span class="val">Ẩn danh, chỉ HR Manager xem</span>
+      </div>
+      <div class="ils-intro-meta-row">
+        <span class="icon">📊</span><span class="lbl">Chính sách</span><span class="val">6 nhóm chính sách</span>
+      </div>
+    </div>
+    <button class="ils-btn ils-btn-accent ils-btn-full" onclick="ILS.go(1)" style="font-size:15px;padding:14px;">
+      Bắt đầu khảo sát →
+    </button>
+    <div class="ils-formcode">HR-002-2025 · Rev.00</div>
+  </div>
+</div>
+
+<!-- ══ STEP 1: THÔNG TIN ══ -->
+<div id="screen-1" class="ils-screen">
+  <div class="ils-progress" id="prog-1"></div>
+  <div class="ils-screen-inner">
+
+    <div class="ils-card">
+      <div class="ils-card-header"><span class="ils-card-header-title">👤 Thông tin nhân viên</span></div>
+      <div class="ils-card-body">
+        <div class="ils-notice info">
+          <span>ℹ️</span>
+          <span>Thông tin này giúp phân tích theo bộ phận. Bạn có thể bỏ qua tên nếu muốn ẩn danh hoàn toàn.</span>
+        </div>
+        <div class="ils-grid-2">
+          <div class="ils-field">
+            <label class="ils-label">Họ và tên <span style="color:var(--ils-muted);font-weight:400;text-transform:none;">(tuỳ chọn)</span></label>
+            <input type="text" id="inp-name" class="ils-input" placeholder="Hoặc để trống">
+          </div>
+          <div class="ils-field">
+            <label class="ils-label">Mã nhân viên <span style="color:var(--ils-muted);font-weight:400;text-transform:none;">(tuỳ chọn)</span></label>
+            <input type="text" id="inp-id" class="ils-input" placeholder="Hoặc để trống">
+          </div>
+        </div>
+        <div class="ils-grid-2">
+          <div class="ils-field" id="f-dept">
+            <label class="ils-label">Bộ phận <span class="ils-req">*</span></label>
+            <select id="inp-dept" class="ils-select">
+              <option value="">-- Chọn bộ phận --</option>
+              <optgroup label="Production Team">
+                <option value="Sản xuất">Sản xuất</option>
+                <option value="QC">QC – Kiểm soát chất lượng</option>
+                <option value="Innovation">Innovation – Cải tiến</option>
+              </optgroup>
+              <optgroup label="Management Team">
+                <option value="HR">HR – Nhân sự</option>
+                <option value="EQM">EQM – Thiết bị & Bảo trì</option>
+                <option value="MM">MM – Kho & Vật tư</option>
+              </optgroup>
+            </select>
+            <div class="ils-field-err">Vui lòng chọn bộ phận</div>
+          </div>
+          <div class="ils-field" id="f-role">
+            <label class="ils-label">Vị trí <span class="ils-req">*</span></label>
+            <select id="inp-role" class="ils-select">
+              <option value="">-- Chọn vị trí --</option>
+              <option>Công nhân / Operator</option>
+              <option>Tổ trưởng / Team Leader</option>
+              <option>Nhân viên văn phòng</option>
+              <option>Quản lý / Supervisor</option>
+            </select>
+            <div class="ils-field-err">Vui lòng chọn vị trí</div>
+          </div>
+        </div>
+        <div class="ils-grid-2">
+          <div class="ils-field" id="f-tenure">
+            <label class="ils-label">Thâm niên tại IL-Sung <span class="ils-req">*</span></label>
+            <select id="inp-tenure" class="ils-select">
+              <option value="">-- Chọn --</option>
+              <option>Dưới 6 tháng</option>
+              <option>6 tháng – 1 năm</option>
+              <option>1 – 2 năm</option>
+              <option>2 – 3 năm</option>
+              <option>Trên 3 năm</option>
+            </select>
+            <div class="ils-field-err">Vui lòng chọn</div>
+          </div>
+          <div class="ils-field">
+            <label class="ils-label">Ca làm việc</label>
+            <select id="inp-shift" class="ils-select">
+              <option value="">-- Chọn --</option>
+              <option>Ca ngày (Hành chính)</option>
+              <option>Ca 1 (Sáng)</option>
+              <option>Ca 2 (Chiều)</option>
+              <option>Ca 3 (Đêm)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ils-nav">
+      <button class="ils-btn ils-btn-outline" onclick="ILS.go(0)">← Quay lại</button>
+      <button class="ils-btn ils-btn-primary" onclick="submitStep1()">Tiếp theo →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ STEP 2: ĐÁNH GIÁ CHÍNH SÁCH ══ -->
+<div id="screen-2" class="ils-screen">
+  <div class="ils-progress" id="prog-2"></div>
+  <div class="ils-screen-inner">
+
+    <div class="ils-profile-banner">
+      <div style="display:flex;align-items:center;">
+        <div class="ils-avatar" id="banner-av">?</div>
+        <div style="margin-left:11px;">
+          <div class="ils-profile-name" id="banner-name">–</div>
+          <div class="ils-profile-sub" id="banner-sub">–</div>
+        </div>
+      </div>
+      <button class="ils-btn ils-btn-outline" style="font-size:12px;padding:7px 13px;" onclick="ILS.go(1)">Sửa</button>
+    </div>
+
+    <div class="ils-notice warning">
+      <span>⭐</span>
+      <span><b>Thang điểm:</b> 1 = Rất không hài lòng &nbsp;·&nbsp; 2 = Không hài lòng &nbsp;·&nbsp; 3 = Bình thường &nbsp;·&nbsp; 4 = Hài lòng &nbsp;·&nbsp; 5 = Rất hài lòng</span>
+    </div>
+
+    <!-- Chính sách 1: Lương & Thưởng -->
+    <div class="ils-card">
+      <div class="ils-card-header"><span class="ils-card-header-title">💰 1. Lương & Thưởng</span></div>
+      <div class="ils-card-body">
+        <div class="policy-card">
+          <div class="policy-title">💵 Mức lương cơ bản</div>
+          <div class="policy-desc">Lương tháng so với công việc và thị trường lao động khu vực</div>
+          <div class="rating-wrap" id="rw-salary"><div class="rating-group" id="rg-salary"></div><div class="rating-field-err">Vui lòng đánh giá mục này</div></div>
+        </div>
+        <div class="policy-card">
+          <div class="policy-title">🎁 Chính sách thưởng (tháng, quý, lễ tết)</div>
+          <div class="policy-desc">Các khoản thưởng theo hiệu suất, lễ tết, tháng 13...</div>
+          <div class="rating-wrap" id="rw-bonus"><div class="rating-group" id="rg-bonus"></div><div class="rating-field-err">Vui lòng đánh giá mục này</div></div>
+        </div>
+        <div class="policy-card">
+          <div class="policy-title">⏰ Tính lương tăng ca (OT)</div>
+          <div class="policy-desc">Mức chi trả OT, cách tính và sự rõ ràng của quy định</div>
+          <div class="rating-wrap" id="rw-ot"><div class="rating-group" id="rg-ot"></div><div class="rating-field-err">Vui lòng đánh giá mục này</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chính sách 2: Bảo hiểm & Phúc lợi -->
+    <div class="ils-card">
+      <div class="ils-card-header"><span class="ils-card-header-title">🛡️ 2. Bảo hiểm & Phúc lợi</span></div>
+      <div class="ils-card-body">
+        <div class="policy-card">
+          <div class="policy-title">📋 BHXH, BHYT, BHTN</div>
+          <div class="policy-desc">Việc đóng đầy đủ, đúng hạn và hỗ trợ khi cần thanh toán bảo hiểm</div>
+          <div class="rating-wrap" id="rw-insurance"><div class="rating-group" id="rg-insurance"></div><div class="rating-field-err">Vui lòng đánh giá mục này</div></div>
+        </div>
+        <div class="policy-card">
+          <div class="policy-title">🎒 Phúc lợi khác (hỗ trợ ăn, đi lại, quà sinh nhật...)</div>
+          <div class="policy-desc">Các khoản hỗ trợ phi tiền lương, phúc lợi ngoài lương</div>
+          <div class="rating-wrap" id="rw-welfare"><div class="rating-group" id="rg-welfare"></div><div class="rating-field-err">Vui lòng đánh giá mục này</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chính sách 3: Giờ làm & Nghỉ phép -->
+    <div class="ils-card">
+      <div class="ils-card-header"><span class="ils-card-header-title">📅 3. Giờ làm & Nghỉ phép</span></div>
+      <div class="ils-card-body">
+        <div class="policy-card">
+          <div class="policy-title">🕐 Lịch làm việc & giờ ca</div>
+          <div class="policy-desc">Sắp xếp ca hợp lý, thời gian nghỉ giữa ca, bố trí lịch công bằng</div>
+          <div class="rating-wrap" id="rw-schedule"><div class="rating-group" id="rg-schedule"></div><div class="rating-field-err">Vui lòng đánh giá mục này</div></div>
+        </div>
+        <div class="policy-card">
+          <div class="policy-title">🌴 Quy định nghỉ phép năm</div>
+          <div class="policy-desc">Số ngày phép, quy trình xin nghỉ và việc được chấp thuận</div>
+          <div class="rating-wrap" id="rw-leave"><div class="rating-group" id="rg-leave"></div><div class="rating-field-err">Vui lòng đánh giá mục này</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chính sách 4: Đào tạo & Phát triển -->
+    <div class="ils-card">
+      <div class="ils-card-header"><span class="ils-card-header-title">📚 4. Đào tạo & Phát triển</span></div>
+      <div class="ils-card-body">
+        <div class="policy-card">
+          <div class="policy-title">🎓 Chương trình đào tạo nội bộ</div>
+          <div class="policy-desc">Tần suất, chất lượng và tính thực tế của các buổi đào tạo</div>
+          <div class="rating-wrap" id="rw-training"><div class="rating-group" id="rg-training"></div><div class="rating-field-err">Vui lòng đánh giá mục này</div></div>
+        </div>
+        <div class="policy-card">
+          <div class="policy-title">🚀 Cơ hội thăng tiến & phát triển nghề nghiệp</div>
+          <div class="policy-desc">Lộ trình rõ ràng, cơ hội tăng bậc, đánh giá công bằng</div>
+          <div class="rating-wrap" id="rw-career"><div class="rating-group" id="rg-career"></div><div class="rating-field-err">Vui lòng đánh giá mục này</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chính sách 5: Môi trường làm việc -->
+    <div class="ils-card">
+      <div class="ils-card-header"><span class="ils-card-header-title">🏭 5. Môi trường làm việc</span></div>
+      <div class="ils-card-body">
+        <div class="policy-card">
+          <div class="policy-title">🦺 An toàn lao động & EHS</div>
+          <div class="policy-desc">Trang bị bảo hộ đầy đủ, quy trình an toàn được thực hiện nghiêm</div>
+          <div class="rating-wrap" id="rw-safety"><div class="rating-group" id="rg-safety"></div><div class="rating-field-err">Vui lòng đánh giá mục này</div></div>
+        </div>
+        <div class="policy-card">
+          <div class="policy-title">🤝 Văn hóa & mối quan hệ nội bộ</div>
+          <div class="policy-desc">Không khí làm việc, sự tôn trọng giữa đồng nghiệp và quản lý</div>
+          <div class="rating-wrap" id="rw-culture"><div class="rating-group" id="rg-culture"></div><div class="rating-field-err">Vui lòng đánh giá mục này</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chính sách 6: Kỷ luật & Xử lý vi phạm -->
+    <div class="ils-card">
+      <div class="ils-card-header"><span class="ils-card-header-title">⚖️ 6. Kỷ luật & Xử lý vi phạm</span></div>
+      <div class="ils-card-body">
+        <div class="policy-card">
+          <div class="policy-title">📜 Tính rõ ràng của nội quy</div>
+          <div class="policy-desc">Nội quy được phổ biến đầy đủ, dễ hiểu, nhất quán</div>
+          <div class="rating-wrap" id="rw-rules"><div class="rating-group" id="rg-rules"></div><div class="rating-field-err">Vui lòng đánh giá mục này</div></div>
+        </div>
+        <div class="policy-card">
+          <div class="policy-title">⚖️ Tính công bằng khi xử lý vi phạm</div>
+          <div class="policy-desc">Quy trình xử lý công khai, minh bạch và đối xử bình đẳng</div>
+          <div class="rating-wrap" id="rw-discipline"><div class="rating-group" id="rg-discipline"></div><div class="rating-field-err">Vui lòng đánh giá mục này</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ils-nav">
+      <button class="ils-btn ils-btn-outline" onclick="ILS.go(1)">← Quay lại</button>
+      <button class="ils-btn ils-btn-primary" onclick="submitStep2()">Tiếp theo →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ STEP 3: GÓP Ý ══ -->
+<div id="screen-3" class="ils-screen">
+  <div class="ils-progress" id="prog-3"></div>
+  <div class="ils-screen-inner">
+
+    <div class="ils-card">
+      <div class="ils-card-header"><span class="ils-card-header-title">✍️ Góp ý & Đề xuất</span></div>
+      <div class="ils-card-body">
+
+        <div class="ils-field" id="f-overall">
+          <label class="ils-label">Đánh giá tổng thể <span class="ils-req">*</span>
+            <span class="ils-label-sub">Nhìn lại 1 tháng qua, bạn hài lòng với các chính sách nhân sự ở mức nào?</span>
+          </label>
+          <div class="rating-wrap" id="rw-overall">
+            <div class="rating-group" id="rg-overall"></div>
+            <div class="rating-field-err">Vui lòng đánh giá tổng thể</div>
+          </div>
+        </div>
+
+        <div class="ils-field" id="f-best">
+          <label class="ils-label">Chính sách hài lòng nhất <span class="ils-req">*</span>
+            <span class="ils-label-sub">Chọn nhóm chính sách bạn đánh giá cao nhất trong tháng qua</span>
+          </label>
+          <select id="inp-best" class="ils-select">
+            <option value="">-- Chọn --</option>
+            <option>Lương & Thưởng</option>
+            <option>Bảo hiểm & Phúc lợi</option>
+            <option>Giờ làm & Nghỉ phép</option>
+            <option>Đào tạo & Phát triển</option>
+            <option>Môi trường làm việc</option>
+            <option>Kỷ luật & Xử lý vi phạm</option>
+          </select>
+          <div class="ils-field-err">Vui lòng chọn</div>
+        </div>
+
+        <div class="ils-field" id="f-worst">
+          <label class="ils-label">Chính sách cần cải thiện nhất <span class="ils-req">*</span>
+            <span class="ils-label-sub">Chọn nhóm chính sách bạn muốn nhà máy cải thiện ngay</span>
+          </label>
+          <select id="inp-worst" class="ils-select">
+            <option value="">-- Chọn --</option>
+            <option>Lương & Thưởng</option>
+            <option>Bảo hiểm & Phúc lợi</option>
+            <option>Giờ làm & Nghỉ phép</option>
+            <option>Đào tạo & Phát triển</option>
+            <option>Môi trường làm việc</option>
+            <option>Kỷ luật & Xử lý vi phạm</option>
+          </select>
+          <div class="ils-field-err">Vui lòng chọn</div>
+        </div>
+
+        <div class="ils-field">
+          <label class="ils-label">Đề xuất cụ thể của bạn
+            <span class="ils-label-sub">Bạn muốn nhà máy thay đổi điều gì? Càng cụ thể càng tốt</span>
+          </label>
+          <textarea id="inp-suggest" class="ils-textarea" rows="3" placeholder="Ví dụ: Cần tăng phụ cấp bữa ăn, rút ngắn thời gian xét tăng lương, bổ sung phòng nghỉ ca đêm..."></textarea>
+        </div>
+
+        <div class="ils-field">
+          <label class="ils-label">Điều bạn trân trọng nhất ở IL-Sung Tech
+            <span class="ils-label-sub">Chia sẻ điểm tích cực giúp chúng tôi duy trì và phát huy</span>
+          </label>
+          <textarea id="inp-appreciate" class="ils-textarea" rows="2" placeholder="Ví dụ: Đồng nghiệp thân thiện, quản lý lắng nghe, môi trường an toàn..."></textarea>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="ils-nav">
+      <button class="ils-btn ils-btn-outline" onclick="ILS.go(2)">← Quay lại</button>
+      <button class="ils-btn ils-btn-success" id="btn-submit" onclick="submitAll()">✓ Gửi khảo sát</button>
+    </div>
+  </div>
+</div>
+
+<!-- DONE -->
+<div class="ils-done" id="screen-done" style="display:none;">
+  <div class="ils-done-card">
+    <div class="ils-done-icon">🌟</div>
+    <h2 class="ils-done-title">Cảm ơn bạn!</h2>
+    <p class="ils-done-desc">
+      Phản hồi của bạn đã được ghi nhận thành công.<br>
+      HR sẽ tổng hợp kết quả và công bố báo cáo cải thiện vào đầu tháng sau.
+    </p>
+    <button class="ils-btn ils-btn-outline" style="color:#fff;border-color:rgba(255,255,255,0.35);" onclick="ILS.go(0)">
+      Quay về trang đầu
+    </button>
+  </div>
+</div>
+
+<div id="ils-toast"></div>
+
+<script>
+const APPS_SCRIPT_URL = "PASTE_YOUR_APPS_SCRIPT_URL_HERE";
+
+// ── Rating labels ──
+const RATING_LABELS = ["Rất không<br>hài lòng","Không<br>hài lòng","Bình<br>thường","Hài<br>lòng","Rất<br>hài lòng"];
+const RATING_FIELDS = ["salary","bonus","ot","insurance","welfare","schedule","leave","training","career","safety","culture","rules","discipline","overall"];
+
+// Sinh rating buttons
+function buildRatings() {
+  RATING_FIELDS.forEach(f => {
+    const container = document.getElementById(`rg-${f}`);
+    if (!container) return;
+    for (let i = 1; i <= 5; i++) {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "rating-btn";
+      btn.dataset.v = i;
+      btn.dataset.field = f;
+      btn.innerHTML = `<span class="score">${i}</span><span class="lbl">${RATING_LABELS[i-1]}</span>`;
+      btn.onclick = () => selectRating(f, i);
+      container.appendChild(btn);
+    }
+  });
+}
+
+function selectRating(field, val) {
+  document.querySelectorAll(`#rg-${field} .rating-btn`).forEach(b => {
+    b.classList.toggle("selected", parseInt(b.dataset.v) === val);
+  });
+  const wrap = document.getElementById(`rw-${field}`);
+  if (wrap) wrap.classList.remove("has-err");
+}
+
+function getRating(field) {
+  const sel = document.querySelector(`#rg-${field} .rating-btn.selected`);
+  return sel ? parseInt(sel.dataset.v) : null;
+}
+
+// ── State ──
+let profileData = {};
+
+// ── ILS Core ──
+const ILS = (() => {
+  let _labels = [];
+  function go(n) {
+    document.getElementById("screen-intro").style.display = "none";
+    document.getElementById("screen-done").style.display = "none";
+    document.querySelectorAll(".ils-screen").forEach(s => s.classList.remove("active"));
+    const topbar = document.getElementById("ils-topbar");
+    if (n === 0) {
+      document.getElementById("screen-intro").style.display = "flex";
+      topbar.style.display = "none";
+    } else if (n === "done") {
+      document.getElementById("screen-done").style.display = "flex";
+      topbar.style.display = "none";
+    } else {
+      document.getElementById(`screen-${n}`).classList.add("active");
+      topbar.style.display = "flex";
+      renderProg(n);
+    }
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+  function renderProg(cur) {
+    ["prog-1","prog-2","prog-3"].forEach((id, i) => {
+      const el = document.getElementById(id); if (!el) return;
+      let html = '<div class="ils-progress-steps">';
+      _labels.forEach((lbl, j) => {
+        const n = j+1;
+        const state = n < cur ? "done" : n === cur ? "active" : "idle";
+        const bg = state==="done" ? "#16A34A" : state==="active" ? "var(--app-color)" : "var(--ils-border)";
+        const fg = state==="idle" ? "var(--ils-muted)" : "#fff";
+        const lc = state==="active" ? "var(--app-color)" : state==="done" ? "#16A34A" : "var(--ils-muted)";
+        html += `<div class="ils-ps-item"><div class="ils-ps-circle" style="background:${bg};color:${fg}">${state==="done"?"✓":n}</div><div class="ils-ps-label" style="color:${lc}">${lbl}</div></div>`;
+        if (j < _labels.length-1) html += `<div class="ils-ps-line" style="background:${n<cur?"#16A34A":"var(--ils-border)"}"></div>`;
+      });
+      html += '</div>';
+      el.innerHTML = html;
+    });
+  }
+  function val(id) { const e = document.getElementById(id); return e ? e.value.trim() : ""; }
+  function setErr(id, err) { const e = document.getElementById(id); if(e) e.classList.toggle("has-err", err); }
+  function validateFields(rules) {
+    let ok = true;
+    rules.forEach(r => { const bad = !r.value?.trim?.() && !r.value; setErr(r.fieldId, bad); if(bad) ok = false; });
+    return ok;
+  }
+  function toast(msg) {
+    const t = document.getElementById("ils-toast");
+    t.textContent = msg; t.classList.add("show");
+    setTimeout(() => t.classList.remove("show"), 3000);
+  }
+  async function submit(url, payload, onOk, onErr) {
+    if (!url || url === "PASTE_YOUR_APPS_SCRIPT_URL_HERE") {
+      console.log("📋 [DEMO]", JSON.stringify(payload, null, 2));
+      if (onOk) onOk(payload); return;
+    }
+    try {
+      await fetch(url, { method:"POST", mode:"no-cors", headers:{"Content-Type":"text/plain"}, body: JSON.stringify(payload) });
+      if (onOk) onOk(payload);
+    } catch(e) { toast("Lỗi kết nối. Thử lại."); if(onErr) onErr(e); }
+  }
+  function init(cfg) { _labels = cfg.steps || []; go(0); }
+  return { go, val, setErr, validateFields, toast, submit, init };
+})();
+
+// ── Step 1 ──
+function submitStep1() {
+  const ok = ILS.validateFields([
+    { fieldId: "f-dept",    value: ILS.val("inp-dept")   },
+    { fieldId: "f-role",    value: ILS.val("inp-role")   },
+    { fieldId: "f-tenure",  value: ILS.val("inp-tenure") },
+  ]);
+  if (!ok) { ILS.toast("Vui lòng điền đầy đủ thông tin bắt buộc (*)"); document.querySelector(".has-err")?.scrollIntoView({behavior:"smooth",block:"center"}); return; }
+  profileData = {
+    name:    ILS.val("inp-name") || "Ẩn danh",
+    id:      ILS.val("inp-id")   || "–",
+    dept:    ILS.val("inp-dept"),
+    role:    ILS.val("inp-role"),
+    tenure:  ILS.val("inp-tenure"),
+    shift:   ILS.val("inp-shift"),
+  };
+  // Update banner
+  const av = document.getElementById("banner-av");
+  av.textContent = profileData.name === "Ẩn danh" ? "?" : profileData.name[0].toUpperCase();
+  document.getElementById("banner-name").textContent = profileData.name;
+  document.getElementById("banner-sub").textContent = `${profileData.dept} · ${profileData.role} · ${profileData.tenure}`;
+  ILS.go(2);
+}
+
+// ── Step 2 ──
+function submitStep2() {
+  const ratingFields = ["salary","bonus","ot","insurance","welfare","schedule","leave","training","career","safety","culture","rules","discipline"];
+  let ok = true;
+  ratingFields.forEach(f => {
+    const wrap = document.getElementById(`rw-${f}`);
+    const val  = getRating(f);
+    if (!val) { if(wrap) wrap.classList.add("has-err"); ok = false; }
+  });
+  if (!ok) { ILS.toast("Vui lòng đánh giá đầy đủ tất cả các mục (*)"); document.querySelector(".has-err")?.scrollIntoView({behavior:"smooth",block:"center"}); return; }
+  ILS.go(3);
+}
+
+// ── Submit all ──
+async function submitAll() {
+  const overallRating = getRating("overall");
+  const best  = ILS.val("inp-best");
+  const worst = ILS.val("inp-worst");
+  const ok = ILS.validateFields([
+    { fieldId: "f-best",  value: best  },
+    { fieldId: "f-worst", value: worst },
+  ]);
+  const rw = document.getElementById("rw-overall");
+  if (!overallRating) { rw?.classList.add("has-err"); ILS.toast("Vui lòng điền đầy đủ thông tin bắt buộc (*)"); return; }
+  if (!ok) { ILS.toast("Vui lòng điền đầy đủ thông tin bắt buộc (*)"); return; }
+
+  const btn = document.getElementById("btn-submit");
+  btn.disabled = true; btn.textContent = "Đang gửi...";
+
+  const payload = {
+    formType:    "HR-002-2025",
+    submittedAt: new Date().toLocaleString("vi-VN"),
+    // Thông tin
+    name:    profileData.name,
+    empId:   profileData.id,
+    dept:    profileData.dept,
+    role:    profileData.role,
+    tenure:  profileData.tenure,
+    shift:   profileData.shift,
+    // Đánh giá chi tiết
+    r_salary:     getRating("salary"),
+    r_bonus:      getRating("bonus"),
+    r_ot:         getRating("ot"),
+    r_insurance:  getRating("insurance"),
+    r_welfare:    getRating("welfare"),
+    r_schedule:   getRating("schedule"),
+    r_leave:      getRating("leave"),
+    r_training:   getRating("training"),
+    r_career:     getRating("career"),
+    r_safety:     getRating("safety"),
+    r_culture:    getRating("culture"),
+    r_rules:      getRating("rules"),
+    r_discipline: getRating("discipline"),
+    r_overall:    overallRating,
+    // Góp ý
+    bestPolicy:   best,
+    worstPolicy:  worst,
+    suggestion:   ILS.val("inp-suggest"),
+    appreciate:   ILS.val("inp-appreciate"),
+  };
+
+  await ILS.submit(APPS_SCRIPT_URL, payload,
+    () => ILS.go("done"),
+    () => { btn.disabled = false; btn.textContent = "✓ Gửi khảo sát"; }
+  );
+}
+
+// ── Init ──
+buildRatings();
+ILS.init({ steps: ["Thông tin", "Đánh giá", "Góp ý"] });
+</script>
+</body>
+</html>

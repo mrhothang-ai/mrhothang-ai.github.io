@@ -1,78 +1,28 @@
 {
   "config": {
-    "siteUrl": "https://mrhothang-ai.github.io",
-    "siteName": "IL-Sung Tech · Hệ Thống Báo Cáo",
-    "updatedAt": "02/07/2026"
+    "siteUrl": "http://mrhothang-ai.github.io",
+    "siteName": "Hệ Thống Báo Cáo IL-SungTech",
+    "updatedAt": "2/7/2026"
   },
   "reports": [
     {
-      "ma": "HR-001",
-      "ten": "Báo Cáo Leader Đi Sớm 15 Phút",
-      "nhom": "hr",
-      "bo_phan": "HR",
-      "icon": "📊",
-      "link": "./dau-ca/index.html",
-      "tan_suat": "Hàng ngày",
-      "trang_thai": "live"
-    },
-    {
-      "ma": "HR-002",
-      "ten": "Báo Cáo Vi Phạm Chấm Công",
-      "nhom": "hr",
-      "bo_phan": "HR",
-      "icon": "📅",
-      "link": "./hr-002/index.html",
-      "tan_suat": "Hàng tuần",
-      "trang_thai": "dev"
-    },
-    {
-      "ma": "HR-003",
-      "ten": "Báo Cáo Thưởng Đa Kỹ Năng",
-      "nhom": "hr",
-      "bo_phan": "HR",
-      "icon": "💰",
-      "link": "./hr-003/index.html",
-      "tan_suat": "Hàng tháng",
-      "trang_thai": "planned"
-    },
-    {
-      "ma": "PRO-001",
-      "ten": "Báo Cáo Hàng Scrap",
-      "nhom": "pro",
-      "bo_phan": "PRO",
-      "icon": "♻️",
-      "link": "./pro-001/index.html",
-      "tan_suat": "Hàng tuần",
-      "trang_thai": "dev"
-    },
-    {
-      "ma": "PRO-002",
-      "ten": "Báo Cáo Tổn Thất Vật Liệu",
-      "nhom": "pro",
-      "bo_phan": "PRO",
-      "icon": "📉",
-      "link": "./pro-002/index.html",
-      "tan_suat": "Hàng ngày",
-      "trang_thai": "planned"
-    },
-    {
-      "ma": "QC-001",
-      "ten": "Báo Cáo CAPA Khách Hàng",
-      "nhom": "qc",
-      "bo_phan": "QC",
-      "icon": "📋",
-      "link": "./qc-001/index.html",
-      "tan_suat": "Theo sự kiện",
-      "trang_thai": "planned"
-    },
-    {
       "ma": "EQM-001",
-      "ten": "Khai Báo Thiết Bị Di Động",
+      "ten": "test",
       "nhom": "eqm",
       "bo_phan": "EQM",
       "icon": "📱",
-      "link": "./eqm-thietbi/index.html",
-      "tan_suat": "Định kỳ",
+      "link": "./eqm-001/index.html",
+      "tan_suat": "Hàng tuần",
+      "trang_thai": "live"
+    },
+    {
+      "ma": "EQM-003",
+      "ten": "test",
+      "nhom": "eqm",
+      "bo_phan": "EQM",
+      "icon": "📊",
+      "link": "./eqm-003/index.html",
+      "tan_suat": "Hàng ngày",
       "trang_thai": "live"
     }
   ]

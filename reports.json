@@ -2,7 +2,7 @@
   "config": {
     "siteUrl": "https://mrhothang-ai.github.io",
     "siteName": "IL-Sung Tech · Hệ Thống Báo Cáo",
-    "updatedAt": "02/07/2026"
+    "updatedAt": "2/7/2026"
   },
   "reports": [
     {
@@ -23,17 +23,7 @@
       "icon": "📅",
       "link": "./hr-002/index.html",
       "tan_suat": "Hàng tuần",
-      "trang_thai": "dev"
-    },
-    {
-      "ma": "HR-003",
-      "ten": "Báo Cáo Thưởng Đa Kỹ Năng",
-      "nhom": "hr",
-      "bo_phan": "HR",
-      "icon": "💰",
-      "link": "./hr-003/index.html",
-      "tan_suat": "Hàng tháng",
-      "trang_thai": "planned"
+      "trang_thai": "live"
     },
     {
       "ma": "PRO-001",

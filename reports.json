@@ -2,67 +2,27 @@
   "config": {
     "siteUrl": "https://mrhothang-ai.github.io",
     "siteName": "IL-Sung Tech · Hệ Thống Báo Cáo",
-    "updatedAt": "2/7/2026"
+    "updatedAt": "4/7/2026"
   },
   "reports": [
     {
       "ma": "HR-001",
-      "ten": "Báo Cáo Leader Đi Sớm 15 Phút",
+      "ten": "Báo cáo nhân lực hàng ngày 인력 현황 보고",
       "nhom": "hr",
       "bo_phan": "HR",
-      "icon": "📊",
+      "icon": "📈",
       "link": "./hr-001/index.html",
-      "tan_suat": "Hàng ngày",
+      "tan_suat": "Hàng tháng",
       "trang_thai": "live"
     },
     {
       "ma": "HR-002",
-      "ten": "Báo Cáo Vi Phạm Chấm Công",
+      "ten": "Khảo sát chính sách nhân sự",
       "nhom": "hr",
       "bo_phan": "HR",
-      "icon": "📅",
+      "icon": "✅",
       "link": "./hr-002/index.html",
-      "tan_suat": "Hàng tuần",
-      "trang_thai": "live"
-    },
-    {
-      "ma": "PRO-001",
-      "ten": "Báo Cáo Hàng Scrap",
-      "nhom": "pro",
-      "bo_phan": "PRO",
-      "icon": "♻️",
-      "link": "./pro-001/index.html",
-      "tan_suat": "Hàng tuần",
-      "trang_thai": "dev"
-    },
-    {
-      "ma": "PRO-002",
-      "ten": "Báo Cáo Tổn Thất Vật Liệu",
-      "nhom": "pro",
-      "bo_phan": "PRO",
-      "icon": "📉",
-      "link": "./pro-002/index.html",
       "tan_suat": "Hàng ngày",
-      "trang_thai": "planned"
-    },
-    {
-      "ma": "QC-001",
-      "ten": "Báo Cáo CAPA Khách Hàng",
-      "nhom": "qc",
-      "bo_phan": "QC",
-      "icon": "📋",
-      "link": "./qc-001/index.html",
-      "tan_suat": "Theo sự kiện",
-      "trang_thai": "planned"
-    },
-    {
-      "ma": "EQM-001",
-      "ten": "Khai Báo Thiết Bị Di Động",
-      "nhom": "eqm",
-      "bo_phan": "EQM",
-      "icon": "📱",
-      "link": "./eqm-001/index.html",
-      "tan_suat": "Định kỳ",
       "trang_thai": "live"
     }
   ]

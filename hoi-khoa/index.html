@@ -1,1 +1,576 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hội Khóa 12E — 20 Năm Thanh Xuân Trở Lại</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Baloo+2:wght@600;700;800&family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --green-deep:#14602f;
+    --green:#1e8a44;
+    --green-soft:#e8f5e9;
+    --leaf:#66bb6a;
+    --sun:#ffd24c;
+    --sun-deep:#f5a623;
+    --phuong:#e24a2b;
+    --cream:#fdfbf2;
+    --ink:#22402c;
+    --muted:#5b7a63;
+    --border:#cfe6d3;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{
+    font-family:'Be Vietnam Pro',sans-serif;
+    color:var(--ink);
+    background:
+      radial-gradient(ellipse 80% 40% at 50% -5%, #fff8dd 0%, transparent 60%),
+      linear-gradient(180deg,#f2fbf0 0%, var(--cream) 40%, #f0f9ec 100%);
+    min-height:100vh;
+  }
+  .wrap{max-width:560px;margin:0 auto;padding:16px 16px 48px}
+  .flower-strip{text-align:center;font-size:22px;letter-spacing:8px;padding:8px 0 2px;user-select:none}
 
+  /* ═══════════ MÀN 1: BANNER CHƯƠNG TRÌNH ═══════════ */
+  .banner-card{
+    text-align:center;
+    background:linear-gradient(180deg,#ffffff 0%,#f4fcf1 100%);
+    border:2px solid var(--border);
+    border-radius:24px;
+    padding:30px 20px 26px;
+    box-shadow:0 12px 34px rgba(30,138,68,.14);
+    position:relative;overflow:hidden;
+  }
+  .banner-card::before{content:"🌺";position:absolute;top:-6px;left:-8px;font-size:52px;transform:rotate(-15deg)}
+  .banner-card::after{content:"🌼";position:absolute;top:-6px;right:-8px;font-size:52px;transform:rotate(15deg)}
+
+  .b-eyebrow{
+    display:inline-block;
+    font-family:'Baloo 2',sans-serif;font-weight:700;font-size:13px;
+    letter-spacing:.24em;text-transform:uppercase;
+    color:#fff;background:linear-gradient(90deg,var(--green),var(--leaf));
+    border-radius:999px;padding:6px 20px;margin-bottom:14px;
+    box-shadow:0 4px 12px rgba(30,138,68,.3);
+  }
+  .b-title{
+    font-family:'Baloo 2',sans-serif;font-weight:800;
+    font-size:40px;line-height:1.05;color:var(--green-deep);
+  }
+  .b-20{
+    display:flex;align-items:center;justify-content:center;gap:16px;margin:8px 0 2px;
+  }
+  .b-20 .yr{
+    font-family:'Baloo 2',sans-serif;font-weight:800;font-size:20px;color:var(--sun-deep);
+  }
+  .b-20 .yr small{display:block;font-size:.55em;color:var(--muted);font-weight:600;letter-spacing:.25em}
+  .b-20 .num{
+    font-family:'Baloo 2',sans-serif;font-weight:800;font-size:74px;line-height:.95;
+    background:linear-gradient(180deg,var(--leaf) 0%,var(--green) 55%,var(--green-deep) 100%);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+    filter:drop-shadow(0 4px 10px rgba(30,138,68,.35));
+  }
+  .b-script{
+    font-family:'Dancing Script',cursive;font-weight:700;
+    font-size:38px;color:var(--phuong);margin:0 0 4px;
+  }
+  .b-school{
+    font-family:'Baloo 2',sans-serif;font-weight:700;font-size:15px;
+    color:var(--green);letter-spacing:.08em;text-transform:uppercase;
+  }
+  .b-date{
+    display:inline-block;margin-top:14px;
+    font-family:'Baloo 2',sans-serif;font-weight:800;font-size:19px;color:var(--ink);
+    background:linear-gradient(180deg,#fff3c4,var(--sun));
+    border-radius:999px;padding:9px 26px;
+    box-shadow:0 6px 16px rgba(245,166,35,.35);
+  }
+
+  .sched{display:grid;gap:12px;margin-top:18px;text-align:left}
+  .sch-item{
+    display:flex;gap:12px;align-items:flex-start;
+    background:var(--green-soft);
+    border:1.5px solid var(--border);
+    border-radius:16px;padding:14px;
+  }
+  .sch-item .ic{font-size:26px;flex:0 0 auto;margin-top:2px}
+  .sch-item .t{font-family:'Baloo 2',sans-serif;font-weight:800;font-size:16px;color:var(--green-deep)}
+  .sch-item .w{font-weight:600;font-size:14.5px;color:var(--ink);margin:2px 0}
+  .sch-item .d{font-size:13px;color:var(--muted);line-height:1.5}
+
+  .b-fee{
+    margin-top:14px;
+    font-family:'Baloo 2',sans-serif;font-weight:800;font-size:16px;color:#fff;
+    background:linear-gradient(90deg,var(--phuong),#f0763c);
+    border-radius:14px;padding:11px 18px;
+    box-shadow:0 8px 20px rgba(226,74,43,.3);
+    transform:rotate(-1deg);display:inline-block;
+  }
+  .b-fee span{font-family:'Be Vietnam Pro',sans-serif;font-weight:600;font-size:.82em}
+
+  .b-program{
+    margin-top:18px;padding-top:14px;
+    border-top:1.5px dashed var(--border);
+  }
+  .b-program .pt{
+    font-family:'Baloo 2',sans-serif;font-weight:700;font-size:12px;
+    letter-spacing:.28em;text-transform:uppercase;color:var(--green);margin-bottom:10px;
+  }
+  .b-steps{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 7px}
+  .b-steps b{
+    font-weight:600;font-size:12.5px;color:var(--ink);
+    background:#fff;border:1.5px solid var(--border);
+    border-radius:999px;padding:6px 13px;white-space:nowrap;
+  }
+  .b-steps b i{font-style:normal;color:var(--phuong);font-weight:800;margin-right:5px}
+
+  /* Nút CTA vào khảo sát */
+  .cta{
+    width:100%;margin-top:22px;
+    font-family:'Baloo 2',sans-serif;font-weight:800;font-size:20px;
+    color:#fff;
+    background:linear-gradient(135deg,var(--green) 0%,var(--leaf) 100%);
+    border:none;border-radius:999px;
+    padding:17px;cursor:pointer;
+    box-shadow:0 12px 30px rgba(30,138,68,.4);
+    animation:pulse 2.4s ease-in-out infinite;
+    transition:transform .15s;
+  }
+  .cta:active{transform:scale(.97)}
+  @keyframes pulse{
+    0%,100%{box-shadow:0 12px 30px rgba(30,138,68,.4)}
+    50%{box-shadow:0 12px 40px rgba(102,187,106,.65)}
+  }
+  .cta-note{font-size:12.5px;color:var(--muted);margin-top:9px;line-height:1.5}
+
+  /* ═══════════ MÀN 2: KHẢO SÁT ═══════════ */
+  #survey{display:none}
+  .back-link{
+    display:inline-flex;align-items:center;gap:6px;
+    font-family:'Baloo 2',sans-serif;font-weight:700;font-size:14px;
+    color:var(--green-deep);background:#fff;
+    border:1.5px solid var(--border);border-radius:999px;
+    padding:8px 18px;cursor:pointer;margin-bottom:4px;
+  }
+  .s-hero{
+    text-align:center;
+    background:linear-gradient(180deg,#ffffff,#f4fcf1);
+    border:2px solid var(--border);border-radius:20px;
+    padding:20px 18px;margin-top:10px;
+    box-shadow:0 8px 24px rgba(30,138,68,.1);
+  }
+  .s-hero h2{font-family:'Baloo 2',sans-serif;font-weight:800;font-size:26px;color:var(--green-deep)}
+  .s-hero .script{font-family:'Dancing Script',cursive;font-weight:700;font-size:26px;color:var(--phuong)}
+  .s-hero p{font-size:13.5px;color:var(--muted);margin-top:6px;line-height:1.55}
+  .s-hero p b{color:var(--green-deep)}
+
+  .card{
+    background:#fff;border:1.5px solid var(--border);
+    border-radius:18px;padding:20px 18px;margin-top:16px;
+    box-shadow:0 6px 20px rgba(30,138,68,.08);
+  }
+  .sec-title{
+    display:flex;align-items:center;gap:10px;
+    font-family:'Baloo 2',sans-serif;font-weight:800;font-size:18px;
+    color:var(--green-deep);margin-bottom:4px;
+  }
+  .sec-title .num{
+    width:30px;height:30px;flex:0 0 30px;border-radius:50%;
+    background:linear-gradient(135deg,var(--green),var(--leaf));
+    color:#fff;font-size:15px;display:flex;align-items:center;justify-content:center;
+    box-shadow:0 3px 8px rgba(30,138,68,.35);
+  }
+  .sec-desc{font-size:13.5px;color:var(--muted);margin-bottom:14px;line-height:1.5}
+
+  label.f-label{display:block;font-weight:600;font-size:14px;margin:14px 0 6px}
+  label.f-label small{font-weight:500;color:var(--muted)}
+  .req{color:var(--phuong)}
+  input[type=text],textarea{
+    width:100%;border:1.5px solid var(--border);border-radius:12px;
+    padding:12px 14px;font-family:inherit;font-size:15px;color:var(--ink);
+    background:#fbfdf9;outline:none;transition:border-color .2s, box-shadow .2s;
+  }
+  input:focus,textarea:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(30,138,68,.15)}
+  textarea{resize:vertical;min-height:96px;line-height:1.55}
+  .has-err{border-color:var(--phuong) !important;box-shadow:0 0 0 3px rgba(226,74,43,.15) !important}
+  .err-msg{display:none;font-size:12.5px;color:var(--phuong);margin-top:4px}
+  .show-err .err-msg{display:block}
+
+  .photo-add{
+    display:flex;align-items:center;justify-content:center;gap:10px;
+    border:2px dashed var(--leaf);border-radius:14px;
+    background:var(--green-soft);padding:18px;
+    font-weight:600;color:var(--green-deep);font-size:14.5px;
+    cursor:pointer;text-align:center;transition:background .2s;
+  }
+  .photo-add:active{background:#d8efdb}
+  .photo-add.disabled{opacity:.45;pointer-events:none}
+  .photo-count{font-size:13px;color:var(--muted);text-align:center;margin-top:8px}
+  .photo-list{display:flex;flex-direction:column;gap:12px;margin-top:14px}
+  .photo-item{
+    display:flex;gap:12px;border:1.5px solid var(--border);
+    border-radius:14px;padding:10px;background:#fbfdf9;
+  }
+  .photo-item img{
+    width:86px;height:86px;flex:0 0 86px;object-fit:cover;border-radius:10px;
+    border:2px solid #fff;box-shadow:0 3px 10px rgba(0,0,0,.12);
+  }
+  .photo-item .pi-body{flex:1;display:flex;flex-direction:column;gap:6px}
+  .photo-item input{padding:9px 12px;font-size:14px}
+  .photo-item .pi-remove{
+    align-self:flex-start;font-size:12.5px;font-weight:600;color:var(--phuong);
+    background:none;border:none;cursor:pointer;padding:2px 0;font-family:inherit;
+  }
+
+  .consent{
+    display:flex;gap:12px;align-items:flex-start;
+    background:var(--green-soft);border:1.5px solid var(--border);
+    border-radius:14px;padding:14px;margin-top:16px;cursor:pointer;
+  }
+  .consent input{width:20px;height:20px;margin-top:2px;accent-color:var(--green);flex:0 0 20px}
+  .consent span{font-size:13.5px;line-height:1.55}
+
+  .submit-btn{
+    width:100%;margin-top:22px;
+    font-family:'Baloo 2',sans-serif;font-weight:800;font-size:19px;color:#fff;
+    background:linear-gradient(135deg,var(--green) 0%,var(--leaf) 100%);
+    border:none;border-radius:999px;padding:16px;cursor:pointer;
+    box-shadow:0 10px 26px rgba(30,138,68,.35);
+    transition:transform .15s;
+  }
+  .submit-btn:active{transform:scale(.98)}
+  .submit-btn:disabled{opacity:.6;cursor:wait}
+  .note-under{text-align:center;font-size:12.5px;color:var(--muted);margin-top:10px;line-height:1.5}
+
+  /* ═══════════ MÀN 3: CẢM ƠN ═══════════ */
+  .done{
+    display:none;text-align:center;
+    background:linear-gradient(180deg,#ffffff,#f4fcf1);
+    border:2px solid var(--border);border-radius:22px;
+    padding:44px 24px;margin-top:18px;
+    box-shadow:0 10px 30px rgba(30,138,68,.12);
+  }
+  .done .big{font-size:56px;margin-bottom:10px}
+  .done h2{font-family:'Baloo 2',sans-serif;font-weight:800;font-size:26px;color:var(--green-deep);margin-bottom:8px}
+  .done .script{font-family:'Dancing Script',cursive;font-weight:700;font-size:26px;color:var(--phuong);margin-bottom:12px}
+  .done p{font-size:14.5px;color:var(--muted);line-height:1.6}
+  .done button{
+    margin-top:20px;font-family:'Baloo 2',sans-serif;font-weight:700;font-size:15px;
+    color:var(--green-deep);background:#fff;
+    border:2px solid var(--green);border-radius:999px;
+    padding:10px 26px;cursor:pointer;margin:20px 6px 0;
+  }
+
+  #toast{
+    position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(120%);
+    background:var(--ink);color:#fff;font-size:14px;
+    padding:12px 22px;border-radius:999px;
+    box-shadow:0 10px 26px rgba(0,0,0,.3);
+    transition:transform .3s;z-index:99;max-width:90vw;text-align:center;
+  }
+  #toast.show{transform:translateX(-50%) translateY(0)}
+
+  .footer{
+    text-align:center;margin-top:26px;
+    font-family:'Dancing Script',cursive;font-weight:700;
+    font-size:22px;color:var(--green);
+  }
+  @media(prefers-reduced-motion:reduce){.cta{animation:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="flower-strip">🌺 🌼 🍃 🌼 🌺</div>
+
+  <!-- ═══════════ MÀN 1: BANNER ═══════════ -->
+  <div id="banner">
+    <div class="banner-card">
+      <div class="b-eyebrow">Trường THPT Quỳ Hợp 1</div>
+      <div class="b-title">HỘI KHÓA 12E</div>
+      <div class="b-20">
+        <div class="yr">2006<small>ngày ấy</small></div>
+        <div class="num">20</div>
+        <div class="yr">2026<small>bây giờ</small></div>
+      </div>
+      <div class="b-script">Thanh Xuân Trở Lại</div>
+      <div class="b-school">Niên khóa 2003 – 2006</div>
+      <div class="b-date">📅 Chủ nhật, 12/07/2026</div>
+
+      <div class="sched">
+        <div class="sch-item">
+          <div class="ic">🌅</div>
+          <div>
+            <div class="t">Sáng — 08h00</div>
+            <div class="w">Chụp ảnh kỷ niệm &amp; Cafe hàn huyên</div>
+            <div class="d">📍 Trường THPT Quỳ Hợp 1 — về lại sân trường xưa</div>
+          </div>
+        </div>
+        <div class="sch-item">
+          <div class="ic">🥂</div>
+          <div>
+            <div class="t">Trưa — 10h30</div>
+            <div class="w">Tiệc hội khóa</div>
+            <div class="d">📍 Nhà hàng Hoà Bình (đối diện cây xăng Khải Huệ, cầu Nậm Tôn)</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="b-fee">💚 Kinh phí: 400.000đ/bạn <span>— trọn gói ăn + quà + ảnh</span></div>
+
+      <div class="b-program">
+        <div class="pt">✦ Chương trình ✦</div>
+        <div class="b-steps">
+          <b><i>1</i>Đón khách, ổn định tổ chức</b>
+          <b><i>2</i>Tuyên bố lí do, giới thiệu đại biểu</b>
+          <b><i>3</i>Đại diện lớp phát biểu</b>
+          <b><i>4</i>Cô giáo chủ nhiệm phát biểu</b>
+          <b><i>5</i>Tặng quà đại biểu</b>
+          <b><i>6</i>Chụp ảnh lưu niệm</b>
+        </div>
+      </div>
+
+      <button class="cta" onclick="showSurvey()">🌻 Góp ký ức của bạn ngay!</button>
+      <div class="cta-note">
+        Gửi ảnh cũ + đôi dòng chia sẻ, tri ân thầy cô —<br>
+        tất cả sẽ thành <b>video kỷ niệm</b> chiếu trong ngày hội khóa 💚
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════ MÀN 2: KHẢO SÁT ═══════════ -->
+  <div id="survey">
+    <button class="back-link" onclick="showBanner()">← Về trang chương trình</button>
+
+    <div class="s-hero">
+      <h2>GÓP KÝ ỨC</h2>
+      <div class="script">Thanh Xuân Trở Lại</div>
+      <p>Gửi <b>vài tấm ảnh</b> và <b>đôi dòng chia sẻ</b> —
+      tất cả sẽ được dựng thành <b>video kỷ niệm</b> chiếu ngày <b>12/07/2026</b> 💚</p>
+    </div>
+
+    <div class="card">
+      <div class="sec-title"><span class="num">1</span> Bạn là ai của 12E? 😄</div>
+      <div class="sec-desc">Để cả lớp nhận ra bạn trong video!</div>
+      <div id="fw-name">
+        <label class="f-label">Họ và tên <span class="req">*</span></label>
+        <input type="text" id="f-name" placeholder="VD: Nguyễn Văn An">
+        <div class="err-msg">Nhập họ tên của bạn nhé</div>
+      </div>
+      <label class="f-label">Biệt danh thời đi học <small>(nếu có — càng "chất" càng vui 😆)</small></label>
+      <input type="text" id="f-nick" placeholder="VD: An còi, Hoa lớp trưởng...">
+    </div>
+
+    <div class="card">
+      <div class="sec-title"><span class="num">2</span> Ảnh kỷ niệm 📸</div>
+      <div class="sec-desc">
+        Tối đa <b>5 ảnh</b> — ảnh cũ thời đi học, ảnh chụp lại từ album giấy,
+        hay ảnh hiện tại đều quý. Nhớ ghi <b>chú thích</b> để video có phụ đề nhé!
+      </div>
+      <label class="photo-add" id="photo-add-btn">
+        <input type="file" id="f-photos" accept="image/*" multiple hidden>
+        <span>➕ Chọn ảnh từ điện thoại / máy tính</span>
+      </label>
+      <div class="photo-count" id="photo-count">Chưa có ảnh nào (0/5)</div>
+      <div class="photo-list" id="photo-list"></div>
+    </div>
+
+    <div class="card">
+      <div class="sec-title"><span class="num">3</span> Đôi dòng từ trái tim 💌</div>
+      <div class="sec-desc">Viết mộc mạc thôi cũng được — chính những dòng này làm nên video!</div>
+
+      <div id="fw-memory">
+        <label class="f-label">Kỷ niệm đáng nhớ nhất thời học sinh <span class="req">*</span></label>
+        <textarea id="f-memory" placeholder="VD: Nhớ nhất lần cả lớp trốn tiết ra căng tin, bị cô chủ nhiệm bắt tại trận..."></textarea>
+        <div class="err-msg">Chia sẻ một kỷ niệm nho nhỏ nhé, đừng bỏ trống 🥺</div>
+      </div>
+
+      <label class="f-label">Lời tri ân gửi thầy cô 🙏 <small>(sẽ ghép thành phân đoạn tri ân trong video)</small></label>
+      <textarea id="f-thanks" placeholder="VD: Em cảm ơn cô... nhờ cô mà em..."></textarea>
+
+      <label class="f-label">Lời nhắn cho bạn cùng lớp 💬</label>
+      <textarea id="f-friends" placeholder="VD: Gửi hội bàn cuối: 20 năm rồi vẫn nhớ tụi bây..."></textarea>
+
+      <label class="f-label">Bài hát gợi nhớ thanh xuân của bạn 🎵 <small>(gợi ý nhạc nền video)</small></label>
+      <input type="text" id="f-song" placeholder="VD: Mong ước kỷ niệm xưa, Phượng hồng...">
+
+      <label class="consent" for="f-consent">
+        <input type="checkbox" id="f-consent">
+        <span>Mình đồng ý cho Ban tổ chức sử dụng hình ảnh và chia sẻ này trong
+        <b>video kỷ niệm chiếu tại hội khóa 12E</b> ngày 12/07/2026.</span>
+      </label>
+      <div class="err-msg" id="consent-err" style="margin-top:6px">Tick đồng ý để BTC được dùng ảnh trong video nhé</div>
+
+      <button class="submit-btn" id="btn-submit">🌻 Gửi ký ức của tôi</button>
+      <div class="note-under">Ảnh được tự động nén nhẹ trước khi gửi · Có thể gửi lại nhiều lần nếu muốn bổ sung</div>
+    </div>
+  </div>
+
+  <!-- ═══════════ MÀN 3: CẢM ƠN ═══════════ -->
+  <div class="done" id="done">
+    <div class="big">🌸</div>
+    <h2>Đã nhận được ký ức của bạn!</h2>
+    <div class="script">Hẹn gặp ngày 12/07/2026</div>
+    <p>Cảm ơn bạn đã góp một mảnh thanh xuân.<br>
+    Video kỷ niệm sẽ rực rỡ hơn nhờ có bạn 💚</p>
+    <div>
+      <button onclick="resetForm()">Gửi thêm lượt khác</button>
+      <button onclick="backHome()">Về trang chương trình</button>
+    </div>
+  </div>
+
+  <div class="footer">~ 12E · Một thời để nhớ ~</div>
+  <div class="flower-strip">🍃 🌼 🌺 🌼 🍃</div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+/* ═════════ CẤU HÌNH ═════════
+   Sau khi deploy Apps Script (file Code_KyUc12E.gs),
+   dán URL dạng /exec vào dòng dưới: */
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbznBMj96KtkhFSO-5Fl-Dg8SL8vC6taSOHpWZ3C_PqnogO7FcR3zESw9CrF-jq4hnac-Q/exec";
+const FORM_TYPE = "12E-KYUC-2026";
+const MAX_PHOTOS = 5;
+/* ════════════════════════════ */
+
+let photos = [];
+const $ = id => document.getElementById(id);
+const toast = (msg,d=3200)=>{const t=$('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),d)};
+
+/* ── Chuyển màn hình ── */
+function showSurvey(){
+  $('banner').style.display='none';
+  $('survey').style.display='block';
+  $('done').style.display='none';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function showBanner(){
+  $('survey').style.display='none';
+  $('done').style.display='none';
+  $('banner').style.display='block';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function backHome(){resetFields();showBanner();}
+
+/* ── Chọn & nén ảnh ── */
+$('f-photos').addEventListener('change', async e=>{
+  const files=[...e.target.files];
+  for(const f of files){
+    if(photos.length>=MAX_PHOTOS){toast('Tối đa '+MAX_PHOTOS+' ảnh thôi nhé 😊');break;}
+    if(!f.type.startsWith('image/'))continue;
+    try{
+      const dataUrl=await compress(f);
+      photos.push({name:f.name,dataUrl,caption:''});
+    }catch(err){toast('Không đọc được ảnh: '+f.name)}
+  }
+  e.target.value='';
+  renderPhotos();
+});
+
+function compress(file){
+  return new Promise((res,rej)=>{
+    const img=new Image();
+    const url=URL.createObjectURL(file);
+    img.onload=()=>{
+      const MAX=1280;
+      let w=img.width,h=img.height;
+      if(w>MAX||h>MAX){const r=Math.min(MAX/w,MAX/h);w=Math.round(w*r);h=Math.round(h*r);}
+      const cv=document.createElement('canvas');cv.width=w;cv.height=h;
+      cv.getContext('2d').drawImage(img,0,0,w,h);
+      URL.revokeObjectURL(url);
+      res(cv.toDataURL('image/jpeg',0.82));
+    };
+    img.onerror=rej;
+    img.src=url;
+  });
+}
+
+function renderPhotos(){
+  const list=$('photo-list');
+  list.innerHTML='';
+  photos.forEach((p,i)=>{
+    const div=document.createElement('div');
+    div.className='photo-item';
+    div.innerHTML=`
+      <img src="${p.dataUrl}" alt="">
+      <div class="pi-body">
+        <input type="text" placeholder="Chú thích: ảnh này là dịp gì, có ai..." value="${p.caption.replace(/"/g,'&quot;')}" oninput="photos[${i}].caption=this.value">
+        <button type="button" class="pi-remove" onclick="removePhoto(${i})">✕ Xóa ảnh này</button>
+      </div>`;
+    list.appendChild(div);
+  });
+  $('photo-count').textContent = photos.length===0
+    ? 'Chưa có ảnh nào (0/'+MAX_PHOTOS+')'
+    : '🖼️ Đã chọn '+photos.length+'/'+MAX_PHOTOS+' ảnh';
+  $('photo-add-btn').classList.toggle('disabled',photos.length>=MAX_PHOTOS);
+}
+function removePhoto(i){photos.splice(i,1);renderPhotos();}
+
+/* ── Validate & gửi ── */
+$('btn-submit').addEventListener('click', async ()=>{
+  let ok=true;
+  const name=$('f-name').value.trim();
+  const memory=$('f-memory').value.trim();
+
+  mark('fw-name',$('f-name'),!name); if(!name)ok=false;
+  mark('fw-memory',$('f-memory'),!memory); if(!memory)ok=false;
+
+  const consent=$('f-consent').checked;
+  $('consent-err').style.display = consent?'none':'block';
+  if(!consent)ok=false;
+
+  if(!ok){toast('Còn thiếu vài mục bắt buộc nhé 🌿');return;}
+
+  const payload={
+    formType:FORM_TYPE,
+    time:new Date().toLocaleString('vi-VN'),
+    name, nickname:$('f-nick').value.trim(),
+    memory, thanksTeacher:$('f-thanks').value.trim(),
+    msgFriends:$('f-friends').value.trim(),
+    song:$('f-song').value.trim(),
+    consent:true,
+    photos:photos.map(p=>({caption:p.caption.trim(),data:p.dataUrl}))
+  };
+
+  const btn=$('btn-submit');
+  btn.disabled=true;btn.textContent='🌿 Đang gửi ký ức...';
+
+  if(APPS_SCRIPT_URL.includes('PASTE_')){
+    console.log('[DEMO]',payload);
+    setTimeout(()=>{showDone();btn.disabled=false;btn.textContent='🌻 Gửi ký ức của tôi';toast('⚠️ Demo — chưa cấu hình URL Apps Script');},800);
+    return;
+  }
+  try{
+    await fetch(APPS_SCRIPT_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},body:JSON.stringify(payload)});
+    showDone();
+  }catch(e){
+    toast('Lỗi kết nối, thử lại nhé 🙏');
+  }
+  btn.disabled=false;btn.textContent='🌻 Gửi ký ức của tôi';
+});
+
+function mark(wrapId,el,bad){
+  el.classList.toggle('has-err',bad);
+  $(wrapId).classList.toggle('show-err',bad);
+}
+function showDone(){
+  $('survey').style.display='none';
+  $('banner').style.display='none';
+  $('done').style.display='block';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function resetFields(){
+  photos=[];renderPhotos();
+  ['f-name','f-nick','f-memory','f-thanks','f-friends','f-song'].forEach(id=>$(id).value='');
+  $('f-consent').checked=false;
+}
+function resetForm(){
+  resetFields();
+  $('done').style.display='none';
+  $('survey').style.display='block';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+</script>
+</body>
+</html>

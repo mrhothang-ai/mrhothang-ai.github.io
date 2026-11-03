@@ -56,6 +56,7 @@ table{border-collapse:collapse;width:100%;font-size:13px}th,td{border:1px solid 
     <span class="switch"><input type="checkbox" id="deltaChk"><label for="deltaChk">Chỉ gửi dòng thay đổi (delta theo PO)</label></span>
     <span id="baseInfo" class="muted"></span>
   </div>
+  <div id="sheetMsg" style="display:none;margin-top:10px;padding:8px 12px;border-radius:9px;background:#fff6e5;color:#8a5a00;font-size:13px"></div>
 </div>
 
 <div class="card">
@@ -2481,20 +2482,33 @@ function loadWB(ab){
 function extract(){
   const ws=WB.Sheets[$('#sheetSel').value];
   const aoa=XLSX.utils.sheet_to_json(ws,{header:1,raw:true,defval:null});
-  if(!aoa.length){ROWS=[];return done();}
-  const hdr=aoa[0].map(h=>h==null?'':String(h).trim());
-  // tìm cột theo tên (khối gốc dùng lần xuất hiện cuối của 'PO' v.v.)
-  const colOf=name=>{let idx=-1;hdr.forEach((h,i)=>{if(h===name)idx=i;});return idx;};
-  const cols=WANT.map(([n,k])=>colOf(n));
   SCHEMA=WANT.map(([,k])=>k);
-  const poC=cols[0];
   ROWS=[];
-  for(let r=1;r<aoa.length;r++){
-    const po=pv(aoa[r][poC]); if(po===null)continue;
-    ROWS.push(cols.map(c=>c<0?null:pv(aoa[r][c])));
+  if(!aoa.length){warn('Sheet trống.');return done();}
+  // chuẩn hoá tên cột: bỏ khoảng trắng thừa, không phân biệt hoa/thường, gộp các kiểu dấu nháy
+  const norm=h=>h==null?'':String(h).replace(/[’‘`´]/g,"'").replace(/\s+/g,' ').trim().toLowerCase();
+  // tự dò dòng tiêu đề trong 20 dòng đầu: dòng có cột PO và nhiều cột cần nhất
+  let hRow=-1,best=0;
+  for(let r=0;r<Math.min(20,aoa.length);r++){
+    const h=(aoa[r]||[]).map(norm); if(!h.includes('po'))continue;
+    const score=WANT.filter(([n])=>h.includes(norm(n))).length;
+    if(score>best){best=score;hRow=r;}
   }
+  if(hRow<0){warn('Không tìm thấy dòng tiêu đề có cột "PO" trong 20 dòng đầu của sheet này. Hãy chọn đúng sheet.');return done();}
+  const hdr=aoa[hRow].map(norm);
+  // khối gốc có thể lặp tên cột (vd Plan Master): lấy lần xuất hiện cuối
+  const colOf=name=>{let idx=-1;const k=norm(name);hdr.forEach((h,i)=>{if(h===k)idx=i;});return idx;};
+  const cols=WANT.map(([n])=>colOf(n));
+  const poC=cols[0];
+  for(let r=hRow+1;r<aoa.length;r++){
+    const row=aoa[r]||[];const po=pv(row[poC]); if(po===null)continue;
+    ROWS.push(cols.map(c=>c<0?null:pv(row[c])));
+  }
+  const miss=WANT.filter((_,i)=>cols[i]<0).map(([n])=>n);
+  warn((hRow>0?`Tiêu đề ở dòng ${hRow+1}. `:'')+(miss.length?`Thiếu cột: ${miss.join(', ')} (để trống). `:'')+(ROWS.length?'':'Không có dòng PO nào.'));
   done();
 }
+function warn(msg){const el=$('#sheetMsg');if(!el)return;el.textContent=msg||'';el.style.display=msg?'block':'none';}
 function baseKey(){return 'ilsqr_base_'+($('#sheetSel').value||'x');}
 function done(){
   $('#gen').disabled=!ROWS||!ROWS.length;

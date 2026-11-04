@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Mã QR đăng ký tuyển dụng – IL-Sung Tech</title>
+<style>
+  body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;background:#f4f8ff;color:#0f172a}
+  .wrap{max-width:980px;margin:0 auto;padding:20px 16px}
+  h1{color:#0b3a8c;margin:0 0 4px;font-size:26px}
+  p.sub{color:#475569;margin:0 0 18px}
+  .bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;background:#fff;border:1px solid #dbe5f3;border-radius:14px;padding:12px;margin-bottom:16px}
+  .bar input{flex:1;min-width:240px;font:inherit;padding:10px 12px;border:1.5px solid #c7d4ea;border-radius:10px}
+  button{font:inherit;font-weight:700;border:0;border-radius:10px;padding:10px 16px;cursor:pointer;background:#0b3a8c;color:#fff}
+  button.alt{background:#fff;color:#0b3a8c;border:1.5px solid #0b3a8c}
+  .grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(210px,1fr))}
+  .q{background:#fff;border:1px solid #dbe5f3;border-radius:16px;padding:16px;text-align:center}
+  .q h3{margin:0 0 6px;color:#0b3a8c}
+  .q canvas{width:180px;height:180px;image-rendering:pixelated}
+  .q code{display:block;font-size:11px;color:#64748b;word-break:break-all;margin:6px 0 10px}
+  @media print{.bar,.q button,p.sub{display:none}body{background:#fff}.q{border:1px solid #999;break-inside:avoid}}
+</style>
+<script src="qrcode.js"></script>
+</head>
+<body>
+<div class="wrap">
+  <h1>Mã QR đăng ký tuyển dụng</h1>
+  <p class="sub">Mỗi kênh có một mã riêng (thêm <code>?src=</code>) để biết ứng viên đến từ đâu. Tải PNG để in lên poster, hoặc bấm In.</p>
+  <div class="bar">
+    <label for="base"><b>Địa chỉ trang đăng ký:</b></label>
+    <input id="base" aria-label="Địa chỉ trang đăng ký">
+    <button id="apply">Tạo lại mã</button>
+    <button class="alt" onclick="window.print()">In</button>
+  </div>
+  <div class="grid" id="grid"></div>
+</div>
+<script>
+const CHANNELS = [["poster", "Poster / tờ rơi"], ["tiktok", "TikTok"], ["zalo", "Zalo"], ["facebook", "Facebook"], ["nguoi_quen", "Người quen giới thiệu"]];
+const baseInput = document.getElementById("base");
+baseInput.value = location.origin + location.pathname.replace(/qr\.html$/, "");
+
+function draw(text, canvas) {
+  const qr = qrcode(0, "M");            // version tu dong, muc sua loi M
+  qr.addData(text, "Byte"); qr.make();
+  const n = qr.getModuleCount(), cell = 10, quiet = 4, size = (n + quiet * 2) * cell;
+  canvas.width = canvas.height = size;
+  const g = canvas.getContext("2d");
+  g.fillStyle = "#fff"; g.fillRect(0, 0, size, size); g.fillStyle = "#0b3a8c";
+  for (let r = 0; r < n; r++) for (let c = 0; c < n; c++) if (qr.isDark(r, c)) g.fillRect((c + quiet) * cell, (r + quiet) * cell, cell, cell);
+}
+
+function render() {
+  const base = baseInput.value.trim().replace(/\/?$/, "/");
+  document.getElementById("grid").innerHTML = "";
+  for (const [src, label] of CHANNELS) {
+    const url = `${base}?src=${src}#dang-ky`;
+    const box = document.createElement("div"); box.className = "q";
+    box.innerHTML = `<h3>${label}</h3><canvas aria-label="QR ${label}"></canvas><code>${url}</code><button>Tải PNG</button>`;
+    const cv = box.querySelector("canvas"); draw(url, cv);
+    box.querySelector("button").onclick = () => { const a = document.createElement("a"); a.download = `qr-tuyendung-${src}.png`; a.href = cv.toDataURL("image/png"); a.click(); };
+    document.getElementById("grid").appendChild(box);
+  }
+}
+document.getElementById("apply").onclick = render;
+render();
+</script>
+</body>
+</html>

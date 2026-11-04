@@ -10316,10 +10316,22 @@ async function scanImage(file){
   if('BarcodeDetector' in window){
     try{const det=new BarcodeDetector({formats:['qr_code']});(await det.detect(cv)).forEach(c=>c.rawValue&&codes.add(c.rawValue));}catch(e){}
   }
-  // 2) Quét theo ô chồng lấn (nhiều mức chia) — mỗi ô ~ chứa một QR, bắt được cả lưới từ 1 ảnh
   const W=cv.width,H=cv.height;
   const jq=(data,w,h)=>jsQR(data,w,h,{inversionAttempts:'attemptBoth'});
-  for(const div of [1,2,3,4]){
+  // 2) Tìm vị trí từng QR (khối đậm, gần vuông, cách nhau bởi khoảng trắng) -> cắt riêng -> đọc
+  const boxes=findQrBoxes(cv);let boxOk=0;
+  for(const b of boxes){
+    let hit=null;
+    for(const m of [0.10,0.18,0.04]){
+      const p=Math.round(b.s*m),x=Math.max(0,b.x-p),y=Math.max(0,b.y-p),w=Math.min(W-x,b.w+2*p),h=Math.min(H-y,b.h+2*p);
+      if(w<40||h<40)continue;
+      const c=jq(ctx.getImageData(x,y,w,h).data,w,h);if(c&&c.data){hit=c.data;break;}
+    }
+    if(hit){codes.add(hit);boxOk++;}
+    await new Promise(r=>setTimeout(r,0)); // nhường UI
+  }
+  // 3) Dự phòng: quét theo ô chồng lấn nếu còn khối chưa đọc được hoặc không tìm thấy khối nào
+  if(!boxes.length||boxOk<boxes.length)for(const div of [1,2,3,4]){
     const tw=Math.max(60,Math.floor(W/div)), th=Math.max(60,Math.floor(H/div));
     const sx=Math.max(30,Math.floor(tw/2)), sy=Math.max(30,Math.floor(th/2)); // chồng 50%
     for(let y=0;y<=H-1;y+=sy){
@@ -10333,7 +10345,7 @@ async function scanImage(file){
       if(oyEnd(y,sy,H,th))break;
     }
   }
-  // 3) xử lý: gói bắt tay (type 0) TRƯỚC, rồi tới gói dữ liệu
+  // 4) xử lý: gói bắt tay (type 0) TRƯỚC, rồi tới gói dữ liệu
   const decoded=[...codes].map(s=>{try{return {s,r:ILSQR.unpack(ILSQR.b45dec(s))};}catch(e){return null;}}).filter(x=>x&&x.r.ok);
   decoded.sort((a,b)=>a.r.type-b.r.type);
   decoded.forEach(x=>handle(x.s));
@@ -10343,6 +10355,39 @@ async function scanImage(file){
  }catch(e){/* bỏ qua ảnh lỗi, tiếp ảnh sau */}
 }
 function oyEnd(y,sy,H,th){return y+sy>H-1 && y>=H-th;}
+// Tìm các vùng có thể là QR: thu nhỏ ảnh, đánh dấu điểm "không trắng", gom vùng liền nhau,
+// giữ vùng gần vuông, đủ lớn, đủ đặc. Trả về toạ độ trên ảnh gốc (cv).
+function findQrBoxes(cv){
+  const W=cv.width,H=cv.height,k=Math.min(1,420/Math.max(W,H));
+  const sw=Math.max(1,Math.round(W*k)),sh=Math.max(1,Math.round(H*k));
+  const sc=document.createElement('canvas');sc.width=sw;sc.height=sh;
+  const sx=sc.getContext('2d',{willReadFrequently:true});sx.imageSmoothingEnabled=true;sx.imageSmoothingQuality='high';
+  sx.drawImage(cv,0,0,sw,sh);const px=sx.getImageData(0,0,sw,sh).data;
+  const g=new Uint8Array(sw*sh);for(let i=0;i<sw*sh;i++)g[i]=(px[i*4]*77+px[i*4+1]*150+px[i*4+2]*29)>>8;
+  // ngưỡng thích nghi: mức "trắng nền" = phân vị 90%
+  const hist=new Uint32Array(256);g.forEach(v=>hist[v]++);
+  let acc=0,p90=255;for(let v=0;v<256;v++){acc+=hist[v];if(acc>=0.9*g.length){p90=v;break;}}
+  const T=Math.max(60,p90-40);
+  let m=new Uint8Array(sw*sh);for(let i=0;i<m.length;i++)m[i]=g[i]<T?1:0;
+  // giãn 1 điểm ảnh để nối các module trong cùng một mã
+  const d=new Uint8Array(m.length);
+  for(let y=0;y<sh;y++)for(let x=0;x<sw;x++){let v=0;for(let dy=-1;dy<=1&&!v;dy++)for(let dx=-1;dx<=1;dx++){const yy=y+dy,xx=x+dx;if(yy>=0&&yy<sh&&xx>=0&&xx<sw&&m[yy*sw+xx]){v=1;break;}}d[y*sw+x]=v;}
+  m=d;
+  const lab=new Int32Array(m.length),out=[],minS=Math.max(10,Math.round(0.06*Math.min(sw,sh)));
+  let id=0;const st=[];
+  for(let i=0;i<m.length;i++){
+    if(!m[i]||lab[i])continue;id++;lab[i]=id;st.push(i);
+    let x0=sw,y0=sh,x1=0,y1=0,cnt=0;
+    while(st.length){const j=st.pop(),x=j%sw,y=(j/sw)|0;cnt++;
+      if(x<x0)x0=x;if(x>x1)x1=x;if(y<y0)y0=y;if(y>y1)y1=y;
+      if(x>0&&m[j-1]&&!lab[j-1]){lab[j-1]=id;st.push(j-1);} if(x<sw-1&&m[j+1]&&!lab[j+1]){lab[j+1]=id;st.push(j+1);}
+      if(y>0&&m[j-sw]&&!lab[j-sw]){lab[j-sw]=id;st.push(j-sw);} if(y<sh-1&&m[j+sw]&&!lab[j+sw]){lab[j+sw]=id;st.push(j+sw);}}
+    const bw=x1-x0+1,bh=y1-y0+1,asp=bw/bh,fill=cnt/(bw*bh);
+    if(bw>=minS&&bh>=minS&&asp>0.7&&asp<1.43&&fill>0.45)
+      out.push({x:Math.round(x0/k),y:Math.round(y0/k),w:Math.round(bw/k),h:Math.round(bh/k),s:Math.round(Math.max(bw,bh)/k)});
+  }
+  return out;
+}
 let flashT=null;
 function flash(msg){const m=$('#meta');m.dataset.base=m.dataset.base||m.textContent;m.innerHTML='<span class="pill warn">'+msg+'</span>';clearTimeout(flashT);flashT=setTimeout(()=>{m.textContent=m.dataset.base||'';},2500);}
 $('#startCam').addEventListener('click',startCam);

@@ -80,6 +80,11 @@ table{border-collapse:collapse;width:100%;font-size:13px}th,td{border:1px solid 
     <button class="btn ghost" id="modePlay">Chiếu tuần tự</button>
     <span class="muted" id="hint"></span>
   </div>
+  <div class="row" style="margin-bottom:12px">
+    <button class="btn primary" id="saveGrid">💾 Lưu ảnh lưới (PNG)</button>
+    <button class="btn ghost" id="saveEach">💾 Lưu từng QR (PNG)</button>
+    <span class="muted" id="saveMsg"></span>
+  </div>
   <div id="gridWrap"><div class="qrs" id="qrs"></div></div>
   <div id="play" class="hidden">
     <img id="playImg" alt="">
@@ -2565,6 +2570,10 @@ async function generate(){
   for(let i=0;i<total-1;i++)pkts.push(ILSQR.pack(1,1,fid,i+1,total,comp.subarray(i*per,(i+1)*per)));
   const ver=+$('#qrVer').value, ecc=$('#ecc').value;
   PKT_STRS=pkts.map(p=>ILSQR.b45enc(p));
+  const now=new Date();
+  window.__meta={fid,epoch,total,n:window.__last.n,mode:window.__last.mode,stamp:stamp(now),
+    time:pad2(now.getDate())+'/'+pad2(now.getMonth()+1)+'/'+now.getFullYear()+' '+pad2(now.getHours())+':'+pad2(now.getMinutes())};
+  $('#saveMsg').textContent='';
   // render
   const qrs=$('#qrs');qrs.innerHTML='';
   PKT_STRS.forEach((s,i)=>{
@@ -2584,13 +2593,89 @@ function saveBaseline(epoch){
   localStorage.setItem(baseKey(),JSON.stringify({epoch,n:ROWS.length,map,ts:Date.now()}));
   $('#baseInfo').textContent='Có baseline #'+epoch+' ('+ROWS.length+' PO)';
 }
-function makeQR(str,ver,ecc){
+function makeQRObj(str,ver,ecc){
   let q;
   if(ver===0){ // tự động: tăng dần tới khi chứa được
     for(let v=5;v<=40;v++){try{q=qrcode(v,ecc);q.addData(str,'Alphanumeric');q.make();break;}catch(e){q=null;}}
   }else{q=qrcode(ver,ecc);q.addData(str,'Alphanumeric');q.make();}
   if(!q)throw new Error('Dữ liệu quá lớn cho phiên bản QR');
-  return q.createDataURL(6,16);
+  return q;
+}
+function makeQR(str,ver,ecc){return makeQRObj(str,ver,ecc).createDataURL(6,16);}
+
+// ===== LƯU ẢNH QR (PNG nét, vẽ trực tiếp từ ma trận QR) =====
+const QUIET=4; // vùng trắng chuẩn quanh QR (module)
+function pad2(n){return String(n).padStart(2,'0');}
+function stamp(d){return d.getFullYear()+pad2(d.getMonth()+1)+pad2(d.getDate())+'-'+pad2(d.getHours())+pad2(d.getMinutes());}
+function labelOf(i,total){return i===0?'HS · Bắt tay':'Gói '+i+' / '+(total-1);}
+function drawQR(ctx,q,x,y,mod){ // vẽ QR kèm vùng trắng, pixel tuyệt đối (không nội suy)
+  const n=q.getModuleCount(),size=(n+QUIET*2)*mod;
+  ctx.fillStyle='#fff';ctx.fillRect(x,y,size,size);ctx.fillStyle='#000';
+  for(let r=0;r<n;r++)for(let c=0;c<n;c++)if(q.isDark(r,c))ctx.fillRect(x+(c+QUIET)*mod,y+(r+QUIET)*mod,mod,mod);
+  return size;
+}
+function canvasToFile(cv,name){
+  return new Promise(res=>cv.toBlob(b=>{
+    const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=name;document.body.appendChild(a);a.click();
+    setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();res();},400);
+  },'image/png'));
+}
+function qrObjs(){const ver=+$('#qrVer').value,ecc=$('#ecc').value;return PKT_STRS.map(s=>makeQRObj(s,ver,ecc));}
+// Ảnh lưới: tối đa 9 QR/ảnh (3×3) để mỗi mã vẫn đủ lớn khi trang nhận đọc
+function buildGridPages(){
+  const qs=qrObjs(),total=qs.length,M=window.__meta;
+  const cols=total<=4?2:3,perPage=cols*cols,pages=Math.ceil(total/perPage);
+  const nMax=Math.max(...qs.map(q=>q.getModuleCount()));
+  const GAP=60,LBL=70,HEAD=150,MAXW=2400;
+  const mod=Math.max(6,Math.min(12,Math.floor((MAXW-(cols+1)*GAP)/(cols*(nMax+QUIET*2)))));
+  const cell=(nMax+QUIET*2)*mod;
+  const out=[];
+  for(let p=0;p<pages;p++){
+    const items=qs.slice(p*perPage,(p+1)*perPage),rows=Math.ceil(items.length/cols);
+    const cv=document.createElement('canvas');
+    cv.width=cols*cell+(cols+1)*GAP;cv.height=HEAD+rows*(cell+LBL)+(rows+1)*GAP;
+    const ctx=cv.getContext('2d');ctx.imageSmoothingEnabled=false;
+    ctx.fillStyle='#fff';ctx.fillRect(0,0,cv.width,cv.height);
+    // tiêu đề
+    ctx.fillStyle='#1b5e9c';ctx.font='bold 44px Arial,sans-serif';ctx.textBaseline='top';
+    ctx.fillText('Dữ liệu QR · Bản #'+M.epoch+' · Trang '+(p+1)+'/'+pages,GAP,36);
+    ctx.fillStyle='#444';ctx.font='28px Arial,sans-serif';
+    ctx.fillText('File '+M.fid.toString(16)+' · '+M.n+' PO · '+(M.mode==='delta'?'delta':'full')+' · '+total+' QR · '+M.time+(pages>1?' · cần nạp đủ '+pages+' trang':''),GAP,92);
+    items.forEach((q,k)=>{
+      const i=p*perPage+k,r=Math.floor(k/cols),c=k%cols;
+      const x=GAP+c*(cell+GAP),y=HEAD+GAP+r*(cell+LBL+GAP);
+      const sz=(q.getModuleCount()+QUIET*2)*mod,off=Math.floor((cell-sz)/2);
+      drawQR(ctx,q,x+off,y+off,mod);
+      ctx.fillStyle=i===0?'#1a8f4c':'#1f2733';ctx.font='bold 34px Arial,sans-serif';ctx.textAlign='center';
+      ctx.fillText(labelOf(i,total),x+cell/2,y+cell+14);ctx.textAlign='left';
+    });
+    out.push({cv,name:`QR_ban${M.epoch}_${M.fid.toString(16)}_${M.stamp}_trang${p+1}-${pages}.png`});
+  }
+  return out;
+}
+function buildSinglePages(){
+  const qs=qrObjs(),total=qs.length,M=window.__meta;
+  return qs.map((q,i)=>{
+    const n=q.getModuleCount(),mod=Math.max(8,Math.floor(900/(n+QUIET*2))),sz=(n+QUIET*2)*mod,LBL=90;
+    const cv=document.createElement('canvas');cv.width=sz;cv.height=sz+LBL;
+    const ctx=cv.getContext('2d');ctx.imageSmoothingEnabled=false;ctx.fillStyle='#fff';ctx.fillRect(0,0,cv.width,cv.height);
+    drawQR(ctx,q,0,0,mod);
+    ctx.fillStyle=i===0?'#1a8f4c':'#1f2733';ctx.font='bold 36px Arial,sans-serif';ctx.textAlign='center';ctx.textBaseline='top';
+    ctx.fillText(labelOf(i,total)+' · Bản #'+M.epoch,sz/2,sz+8);
+    ctx.fillStyle='#666';ctx.font='24px Arial,sans-serif';ctx.fillText('File '+M.fid.toString(16)+' · '+M.time,sz/2,sz+52);
+    return {cv,name:`QR_ban${M.epoch}_${M.fid.toString(16)}_${M.stamp}_${i===0?'00_HS':pad2(i)}.png`};
+  });
+}
+async function saveImages(kind){
+  if(!PKT_STRS)return;
+  const btns=[$('#saveGrid'),$('#saveEach')];btns.forEach(b=>b.disabled=true);
+  try{
+    const pages=kind==='grid'?buildGridPages():buildSinglePages();
+    for(let k=0;k<pages.length;k++){$('#saveMsg').textContent='Đang lưu ảnh '+(k+1)+'/'+pages.length+'…';await canvasToFile(pages[k].cv,pages[k].name);}
+    const px=pages[0].cv.width+'×'+pages[0].cv.height;
+    $('#saveMsg').textContent='Đã lưu '+pages.length+' ảnh PNG ('+px+' px). Trang nhận: bấm "Chọn ảnh QR" và chọn '+(pages.length>1?'tất cả '+pages.length+' ảnh':'ảnh này')+'.';
+  }catch(e){$('#saveMsg').textContent='Lỗi lưu ảnh: '+e.message;}
+  btns.forEach(b=>b.disabled=false);
 }
 function showGrid(){$('#gridWrap').classList.remove('hidden');$('#play').classList.add('hidden');stopPlay();}
 function showPlay(){
@@ -2611,6 +2696,8 @@ $('#sheetSel').addEventListener('change',extract);
 $('#deltaChk').addEventListener('change',()=>{calcStats();});
 $('#per').addEventListener('input',calcStats);
 $('#gen').addEventListener('click',()=>generate().catch(e=>alert(e.message)));
+$('#saveGrid').addEventListener('click',()=>saveImages('grid'));
+$('#saveEach').addEventListener('click',()=>saveImages('each'));
 $('#modeGrid').addEventListener('click',showGrid);
 $('#modePlay').addEventListener('click',showPlay);
 $('#faster').addEventListener('click',()=>{fps=Math.min(10,fps+1);$('#speed').textContent=fps+' QR/giây';if(playTimer)showPlay();calcStats();});

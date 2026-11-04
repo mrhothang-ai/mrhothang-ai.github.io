@@ -10,80 +10,163 @@
 <meta property="og:image" content="img/poster-tuyendung.webp">
 <meta name="theme-color" content="#0b3a8c">
 <style>
-  :root{--navy:#0b3a8c;--blue:#1d5fd1;--sky:#e8f2ff;--green:#16a34a;--green2:#0f7a37;--ink:#0f172a;--mut:#475569;--line:#dbe5f3;--card:#fff;--bg:#f4f8ff;--warn:#b45309;--err:#b91c1c;--r:16px}
-  *{box-sizing:border-box}html{scroll-behavior:smooth}
-  body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;color:var(--ink);background:var(--bg);line-height:1.5;-webkit-text-size-adjust:100%}
-  a{color:var(--blue)}img{max-width:100%;display:block}
-  .wrap{max-width:1040px;margin:0 auto;padding:0 16px}
-  header.top{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
-  header.top .wrap{display:flex;align-items:center;gap:12px;height:56px}
-  .logo{font-weight:900;letter-spacing:.5px;color:var(--navy);display:flex;align-items:center;gap:8px;font-size:17px;text-decoration:none}
-  .logo i{display:inline-block;width:26px;height:20px;background:linear-gradient(180deg,var(--green) 0 30%,transparent 30% 40%,var(--green) 40% 70%,transparent 70% 80%,var(--green) 80%);transform:skewX(-18deg);border-radius:3px}
-  .top .call{margin-left:auto;font-weight:800;color:var(--navy);text-decoration:none;font-size:15px;white-space:nowrap}
-  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:999px;padding:14px 22px;font-weight:800;font-size:16px;cursor:pointer;text-decoration:none;transition:transform .1s}
-  .btn:active{transform:scale(.98)}
-  .btn-go{background:linear-gradient(135deg,var(--green),var(--green2));color:#fff;box-shadow:0 8px 20px rgba(22,163,74,.3)}
-  .btn-line{background:#fff;color:var(--navy);border:2px solid var(--navy)}
-  .hero{background:linear-gradient(160deg,#0b3a8c 0%,#1d5fd1 55%,#38bdf8 100%);color:#fff;padding:34px 0 30px;overflow:hidden}
-  .hero .grid{display:grid;gap:24px;align-items:center}
-  @media(min-width:860px){.hero .grid{grid-template-columns:1.1fr .9fr}}
-  .tag{display:inline-block;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.35);padding:4px 12px;border-radius:999px;font-size:13px;font-weight:700}
-  .hero h1{font-size:clamp(30px,7vw,48px);line-height:1.1;margin:12px 0 8px;font-weight:900}
-  .hero h1 b{color:#86efac}
-  .hero p.lead{font-size:18px;margin:0 0 18px;opacity:.95}
-  .money{display:flex;gap:12px;flex-wrap:wrap;margin:0 0 20px}
-  .money div{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.3);border-radius:14px;padding:10px 14px}
-  .money small{display:block;font-size:12px;opacity:.85;font-weight:700;text-transform:uppercase;letter-spacing:.4px}
-  .money strong{font-size:24px;font-weight:900;color:#fde68a}
-  .hero .cta{display:flex;gap:10px;flex-wrap:wrap}
-  .hero .cta .btn-line{background:transparent;color:#fff;border-color:#fff}
-  .hero img.poster{border-radius:18px;box-shadow:0 20px 40px rgba(0,0,0,.25);max-height:520px;margin:0 auto;width:auto}
-  section{padding:40px 0}
-  h2{font-size:clamp(24px,5vw,32px);margin:0 0 6px;color:var(--navy);font-weight:900}
-  .sub{color:var(--mut);margin:0 0 22px}
-  .cards{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
-  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:18px;box-shadow:0 2px 10px rgba(11,58,140,.05)}
-  .card .ic{width:52px;height:52px;border-radius:50%;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-size:26px;margin-bottom:10px}
-  .card h3{margin:0 0 4px;font-size:18px;color:var(--navy)}
-  .card p{margin:0;color:var(--mut);font-size:15px}
-  .jobs .card{border-top:4px solid var(--green)}
-  .bus{background:linear-gradient(135deg,#ecfdf5,#e8f2ff);border:1px solid #bbf7d0;border-radius:var(--r);padding:18px;display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin-top:14px}
-  .bus b{color:var(--green2);font-size:18px}
-  .gallery{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
-  .gallery img{border-radius:14px;border:1px solid var(--line);background:#fff;cursor:zoom-in}
-  .banner img{border-radius:14px;width:100%}
-  /* form */
-  #dang-ky{background:linear-gradient(180deg,var(--sky),var(--bg))}
-  .formbox{background:#fff;border:1px solid var(--line);border-radius:20px;padding:20px;max-width:620px;margin:0 auto;box-shadow:0 10px 30px rgba(11,58,140,.08)}
-  label.f{display:block;font-weight:700;margin:14px 0 6px;font-size:15px}
-  label.f em{color:var(--err);font-style:normal}
-  input[type=text],input[type=tel],input[type=number],select,textarea{width:100%;font:inherit;font-size:16px;padding:13px 14px;border:1.5px solid #c7d4ea;border-radius:12px;background:#fff;color:var(--ink)}
-  input:focus,select:focus,textarea:focus{outline:3px solid rgba(29,95,209,.2);border-color:var(--blue)}
-  .row2{display:grid;gap:0 12px}@media(min-width:520px){.row2{grid-template-columns:1fr 1fr}}
-  .chips{display:flex;flex-wrap:wrap;gap:8px}
-  .chips label{display:flex;align-items:center;gap:6px;border:1.5px solid #c7d4ea;border-radius:999px;padding:9px 14px;cursor:pointer;font-weight:600;font-size:15px;user-select:none}
-  .chips input{accent-color:var(--green);width:18px;height:18px;margin:0}
-  .chips label:has(input:checked){border-color:var(--green);background:#ecfdf5;color:var(--green2)}
-  .consent{display:flex;gap:10px;align-items:flex-start;margin:16px 0 6px;font-size:14px;color:var(--mut)}
-  .consent input{width:20px;height:20px;margin-top:2px;accent-color:var(--green);flex:0 0 auto}
-  .err{color:var(--err);font-size:14px;margin-top:4px;min-height:0}
-  .hp{position:absolute;left:-5000px;width:1px;height:1px;overflow:hidden}
-  .submit{width:100%;margin-top:14px;font-size:18px;padding:16px}
-  .submit[disabled]{opacity:.6}
-  .done{text-align:center;padding:10px 4px}
-  .done .ok{width:72px;height:72px;border-radius:50%;background:var(--green);color:#fff;font-size:40px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px}
-  .done code{font-size:22px;font-weight:900;color:var(--navy);background:var(--sky);padding:4px 12px;border-radius:10px}
-  .contact{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
-  .social{display:flex;gap:10px;flex-wrap:wrap}
-  .social a{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:999px;background:#fff;border:1.5px solid var(--line);font-weight:700;text-decoration:none;color:var(--ink)}
-  footer{background:var(--navy);color:#cbd5e1;padding:24px 0 90px;font-size:14px}
-  footer a{color:#fff}
-  .sticky-cta{position:fixed;left:0;right:0;bottom:0;z-index:30;display:flex;gap:8px;padding:10px 12px calc(10px + env(safe-area-inset-bottom));background:rgba(255,255,255,.96);border-top:1px solid var(--line)}
-  .sticky-cta .btn{flex:1;padding:13px 10px;font-size:15px}
-  @media(min-width:860px){.sticky-cta{display:none}footer{padding-bottom:24px}}
-  .lightbox{position:fixed;inset:0;background:rgba(0,0,0,.85);display:none;align-items:center;justify-content:center;z-index:50;padding:16px}
-  .lightbox img{max-height:92vh;width:auto;border-radius:10px}
-  .lightbox.on{display:flex}
+:root{--navy:#0b3a8c;--navy2:#072b6b;--blue:#1d5fd1;--sky:#e8f2ff;--green:#16a34a;--green2:#0f7a37;--lime:#86efac;--gold:#fde047;--red:#dc2626;--ink:#0f172a;--mut:#475569;--line:#dbe5f3;--bg:#f4f8ff;--r:18px}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;color:var(--ink);background:var(--bg);line-height:1.5;-webkit-text-size-adjust:100%;overflow-x:hidden}
+img{max-width:100%;height:auto;display:block}            /* height:auto = giu dung ti le anh */
+a{color:var(--blue)}
+.wrap{max-width:1080px;margin:0 auto;padding:0 16px}
+
+/* ---------- header ---------- */
+header.top{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+header.top .wrap{display:flex;align-items:center;gap:12px;height:56px}
+.logo{font-weight:900;letter-spacing:.5px;color:var(--navy);display:flex;align-items:center;gap:8px;font-size:17px;text-decoration:none}
+.logo i{display:inline-block;width:26px;height:20px;background:linear-gradient(180deg,var(--green) 0 28%,transparent 28% 38%,var(--green) 38% 64%,transparent 64% 74%,var(--green) 74%);transform:skewX(-18deg);border-radius:3px}
+.top .call{margin-left:auto;font-weight:800;color:var(--navy);text-decoration:none;white-space:nowrap}
+
+/* ---------- buttons ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:999px;padding:15px 24px;font-weight:800;font-size:17px;cursor:pointer;text-decoration:none;transition:transform .12s,box-shadow .2s;font-family:inherit}
+.btn:active{transform:scale(.97)}
+.btn-go{background:linear-gradient(135deg,#22c55e,var(--green2));color:#fff;box-shadow:0 10px 24px rgba(22,163,74,.35)}
+.btn-go.glow{animation:glow 2.2s ease-in-out infinite}
+@keyframes glow{0%,100%{box-shadow:0 10px 24px rgba(22,163,74,.35),0 0 0 0 rgba(134,239,172,.7)}50%{box-shadow:0 10px 24px rgba(22,163,74,.35),0 0 0 14px rgba(134,239,172,0)}}
+.btn-line{background:#fff;color:var(--navy);border:2px solid var(--navy)}
+.btn-ghost{background:transparent;color:#fff;border:2px solid rgba(255,255,255,.85)}
+
+/* ---------- hero ---------- */
+.hero{position:relative;overflow:hidden;color:#fff;padding:40px 0 46px;background:linear-gradient(125deg,#072b6b,#0b3a8c 35%,#1d5fd1 70%,#38bdf8);background-size:220% 220%;animation:sky 14s ease infinite}
+@keyframes sky{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+.hero::after{content:"";position:absolute;left:-10%;right:-10%;bottom:-60px;height:140px;background:radial-gradient(60% 100% at 50% 0,rgba(134,239,172,.35),transparent 70%);pointer-events:none}
+.hero .grid{position:relative;z-index:2;display:grid;gap:26px;align-items:center}
+@media(min-width:880px){.hero .grid{grid-template-columns:1.15fr .85fr}}
+.tag{display:inline-flex;align-items:center;gap:8px;background:rgba(220,38,38,.92);padding:6px 14px;border-radius:999px;font-size:14px;font-weight:800;box-shadow:0 6px 16px rgba(220,38,38,.35);transform:rotate(-2deg);animation:wiggle 3s ease-in-out infinite}
+@keyframes wiggle{0%,100%{transform:rotate(-2deg)}50%{transform:rotate(2deg) scale(1.03)}}
+.hero h1{font-size:clamp(34px,8.5vw,60px);line-height:1.04;margin:16px 0 10px;font-weight:900;letter-spacing:-.5px}
+.hero h1 .w{display:inline-block;opacity:0;transform:translateY(26px);animation:up .7s cubic-bezier(.2,.8,.2,1) forwards}
+@keyframes up{to{opacity:1;transform:none}}
+.big300{color:var(--gold);text-shadow:0 4px 0 #b45309,0 10px 24px rgba(0,0,0,.25);font-size:1.25em}
+.rot{display:block;font-size:clamp(20px,4.8vw,28px);font-weight:800;margin:4px 0 18px;min-height:1.4em}
+.rot span.word{display:inline-block;color:var(--lime);border-bottom:3px solid var(--lime);animation:flip .5s ease}
+@keyframes flip{from{opacity:0;transform:translateY(60%) rotateX(80deg)}to{opacity:1;transform:none}}
+.money{display:grid;gap:12px;grid-template-columns:1fr 1fr;margin:0 0 22px;max-width:520px}
+.money div{background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.3);border-radius:16px;padding:12px 14px;backdrop-filter:blur(4px)}
+.money small{display:block;font-size:12px;opacity:.9;font-weight:800;text-transform:uppercase;letter-spacing:.5px}
+.money strong{display:block;font-size:clamp(22px,5.6vw,30px);font-weight:900;line-height:1.15}
+.shine{background:linear-gradient(90deg,#fde047,#fff7c2 40%,#fde047 60%,#facc15);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shine 2.6s linear infinite}
+@keyframes shine{to{background-position:-200% 0}}
+.hero .cta{display:flex;gap:10px;flex-wrap:wrap}
+.poster-wrap{position:relative;max-width:380px;margin:0 auto;animation:float 6s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0) rotate(-1.5deg)}50%{transform:translateY(-12px) rotate(1deg)}}
+.poster-wrap img{border-radius:20px;box-shadow:0 26px 50px rgba(0,0,0,.35);border:4px solid rgba(255,255,255,.85)}
+.poster-wrap .sticker{position:absolute;right:-10px;top:18px;background:var(--red);color:#fff;font-weight:900;padding:8px 12px;border-radius:12px;transform:rotate(8deg);box-shadow:0 8px 18px rgba(0,0,0,.25);font-size:15px}
+/* hoa mai roi + phao hoa */
+.fx{position:absolute;inset:0;pointer-events:none;z-index:1;overflow:hidden}
+.petal{position:absolute;top:-40px;font-size:22px;animation:fall linear infinite;filter:drop-shadow(0 2px 2px rgba(0,0,0,.15))}
+@keyframes fall{0%{transform:translate(0,-40px) rotate(0)}100%{transform:translate(var(--dx),110vh) rotate(540deg)}}
+.firework{position:absolute;width:6px;height:6px;border-radius:50%}
+.firework i{position:absolute;left:0;top:0;width:6px;height:6px;border-radius:50%;background:var(--c);animation:burst 1.4s ease-out forwards}
+@keyframes burst{0%{transform:translate(0,0) scale(1);opacity:1}100%{transform:translate(var(--x),var(--y)) scale(.3);opacity:0}}
+
+/* ---------- marquee ---------- */
+.marquee{background:var(--green2);color:#fff;overflow:hidden;white-space:nowrap;border-block:3px solid var(--gold)}
+.marquee .track{display:inline-block;padding:11px 0;animation:mq 28s linear infinite;font-weight:800;font-size:16px}
+.marquee .track span{margin:0 22px}
+@keyframes mq{to{transform:translateX(-50%)}}
+
+/* ---------- sections ---------- */
+section{padding:46px 0}
+h2{font-size:clamp(26px,6vw,36px);margin:0 0 6px;color:var(--navy);font-weight:900;letter-spacing:-.3px}
+h2 .hl{background:linear-gradient(transparent 62%,rgba(134,239,172,.7) 62%)}
+.sub{color:var(--mut);margin:0 0 24px;font-size:16px}
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.8,.2,1)}
+.reveal.in{opacity:1;transform:none}
+.cards{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+.card{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:20px;box-shadow:0 4px 14px rgba(11,58,140,.06);transition:transform .2s,box-shadow .2s}
+.card:hover{transform:translateY(-4px);box-shadow:0 14px 30px rgba(11,58,140,.12)}
+.card .ic{width:58px;height:58px;border-radius:50%;background:linear-gradient(135deg,var(--navy),var(--blue));color:#fff;display:flex;align-items:center;justify-content:center;font-size:28px;margin-bottom:12px}
+.card.in .ic{animation:pop .6s cubic-bezier(.3,1.6,.5,1) both}
+@keyframes pop{0%{transform:scale(.3)}100%{transform:scale(1)}}
+.card h3{margin:0 0 4px;font-size:19px;color:var(--navy)}
+.card p{margin:0;color:var(--mut);font-size:15px}
+.card .num{font-size:30px;font-weight:900;color:var(--green2)}
+.jobs .card{border-top:5px solid var(--green)}
+.bus{display:flex;gap:16px;align-items:center;background:linear-gradient(135deg,#ecfdf5,#e8f2ff);border:1px solid #bbf7d0;border-radius:var(--r);padding:18px;margin-top:16px;overflow:hidden}
+.bus .ride{font-size:40px;animation:drive 3.5s ease-in-out infinite}
+@keyframes drive{0%,100%{transform:translateX(0)}50%{transform:translateX(14px)}}
+.bus b{color:var(--green2);font-size:18px}
+/* posters carousel (giu ti le) */
+.carousel{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;padding:4px 2px 14px;-webkit-overflow-scrolling:touch}
+.carousel figure{margin:0;flex:0 0 min(78%,320px);scroll-snap-align:center}
+.carousel img{border-radius:16px;border:1px solid var(--line);background:#fff;box-shadow:0 6px 18px rgba(11,58,140,.1);cursor:zoom-in;width:100%;aspect-ratio:auto}
+.banner img{border-radius:16px;width:100%;box-shadow:0 6px 18px rgba(11,58,140,.1)}
+
+/* ---------- WAYGROUND-style form ---------- */
+#dang-ky{background:radial-gradient(120% 80% at 50% 0,#dbeafe,var(--bg) 60%)}
+.quiz{scroll-margin-top:72px;max-width:640px;margin:0 auto;background:linear-gradient(160deg,#0b3a8c,#1d5fd1);border-radius:26px;padding:18px;color:#fff;box-shadow:0 20px 50px rgba(11,58,140,.3);position:relative;overflow:hidden}
+.qhead{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.qback{background:rgba(255,255,255,.16);border:0;color:#fff;border-radius:12px;width:44px;height:44px;font-size:20px;cursor:pointer;flex:0 0 auto}
+.qback[disabled]{opacity:.3}
+.qprog{flex:1}
+.qprog .bar{height:10px;background:rgba(255,255,255,.2);border-radius:99px;overflow:hidden}
+.qprog .bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--lime),var(--gold));border-radius:99px;transition:width .45s cubic-bezier(.2,.8,.2,1)}
+.qprog small{display:block;font-weight:700;opacity:.9;margin-top:4px;font-size:13px}
+.qcard{background:#fff;color:var(--ink);border-radius:20px;padding:22px 18px;min-height:150px;display:flex;align-items:center;justify-content:center;text-align:center;box-shadow:0 10px 24px rgba(0,0,0,.18)}
+.qcard h3{margin:0;font-size:clamp(21px,5.4vw,27px);line-height:1.25;color:var(--navy)}
+.qcard h3 small{display:block;font-size:15px;color:var(--mut);font-weight:600;margin-top:6px}
+.step{animation:qin .45s cubic-bezier(.2,.8,.2,1)}
+.step.back{animation:qinb .45s cubic-bezier(.2,.8,.2,1)}
+@keyframes qin{from{opacity:0;transform:translateX(40px) scale(.98)}to{opacity:1;transform:none}}
+@keyframes qinb{from{opacity:0;transform:translateX(-40px) scale(.98)}to{opacity:1;transform:none}}
+.answers{display:grid;gap:12px;margin-top:14px;grid-template-columns:1fr 1fr}
+.answers.one{grid-template-columns:1fr}
+.opt{border:0;border-radius:16px;padding:20px 12px;min-height:84px;color:#fff;font:inherit;font-weight:800;font-size:18px;cursor:pointer;box-shadow:0 6px 0 rgba(0,0,0,.25);transition:transform .1s,box-shadow .1s,filter .2s;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;line-height:1.2}
+.opt .e{font-size:28px}
+.opt:active{transform:translateY(4px);box-shadow:0 2px 0 rgba(0,0,0,.25)}
+.opt.sel{outline:4px solid #fff;outline-offset:-4px;filter:brightness(1.08);animation:chosen .35s ease}
+@keyframes chosen{50%{transform:scale(1.05)}}
+.c1{background:#2563eb}.c2{background:#16a34a}.c3{background:#f59e0b}.c4{background:#e11d48}.c5{background:#7c3aed}.c6{background:#0891b2}
+.inwrap{margin-top:14px}
+.inwrap input{width:100%;font:inherit;font-size:22px;font-weight:700;text-align:center;padding:16px;border:0;border-radius:16px;color:var(--ink);background:#fff;box-shadow:inset 0 -4px 0 #c7d4ea}
+.inwrap input:focus{outline:4px solid var(--lime)}
+.qerr{min-height:24px;margin-top:8px;font-weight:700;color:#fde68a;text-align:center}
+.qnext{display:flex;gap:10px;margin-top:6px}
+.qnext .btn{flex:1}
+.skip{background:rgba(255,255,255,.14);color:#fff}
+.summary{background:#fff;color:var(--ink);border-radius:18px;padding:14px 16px;margin-top:14px;text-align:left;font-size:15px}
+.summary div{display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-bottom:1px dashed var(--line)}
+.summary div:last-child{border:0}
+.summary span{color:var(--mut)}
+.summary b{text-align:right}
+.consent{display:flex;gap:10px;align-items:flex-start;margin:14px 2px 4px;font-size:14px;opacity:.95;text-align:left;cursor:pointer}
+.consent input{width:22px;height:22px;margin-top:1px;accent-color:var(--green);flex:0 0 auto}
+.hp{position:absolute;left:-5000px;width:1px;height:1px;overflow:hidden}
+.done{text-align:center;padding:10px 4px}
+.done .ok{width:84px;height:84px;border-radius:50%;background:var(--green);color:#fff;font-size:46px;display:flex;align-items:center;justify-content:center;margin:6px auto 12px;animation:pop .6s cubic-bezier(.3,1.6,.5,1)}
+.done code{font-size:24px;font-weight:900;color:var(--navy);background:#fff;padding:6px 14px;border-radius:12px;display:inline-block}
+.confetti{position:absolute;top:-10px;width:9px;height:14px;border-radius:2px;animation:conf 1.8s ease-in forwards;z-index:5}
+@keyframes conf{to{transform:translate(var(--x),520px) rotate(720deg);opacity:0}}
+
+/* ---------- contact / footer ---------- */
+.contact{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+.social{display:flex;gap:10px;flex-wrap:wrap}
+.social a{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:999px;background:#fff;border:1.5px solid var(--line);font-weight:700;text-decoration:none;color:var(--ink)}
+.hot{font-size:28px;font-weight:900;text-decoration:none;color:var(--navy);display:inline-block;animation:ring 2.4s ease-in-out infinite}
+@keyframes ring{0%,80%,100%{transform:none}84%{transform:rotate(-4deg)}88%{transform:rotate(4deg)}92%{transform:rotate(-3deg)}96%{transform:rotate(2deg)}}
+footer{background:var(--navy2);color:#cbd5e1;padding:26px 0 96px;font-size:14px}
+footer a{color:#fff}
+.sticky-cta{position:fixed;left:0;right:0;bottom:0;z-index:45;display:flex;gap:8px;padding:10px 12px calc(10px + env(safe-area-inset-bottom));background:rgba(255,255,255,.96);border-top:1px solid var(--line);transition:transform .3s}
+.sticky-cta.hide{transform:translateY(110%)}
+.sticky-cta .btn{flex:1;padding:13px 10px;font-size:16px}
+@media(min-width:880px){.sticky-cta{display:none}footer{padding-bottom:26px}}
+.lightbox{position:fixed;inset:0;background:rgba(0,0,0,.88);display:none;align-items:center;justify-content:center;z-index:60;padding:16px}
+.lightbox img{max-height:92vh;width:auto;max-width:100%;border-radius:12px}
+.lightbox.on{display:flex}
+
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .hero h1 .w,.reveal{opacity:1;transform:none}
+  .fx{display:none}
+}
 </style>
 </head>
 <body>
@@ -92,118 +175,94 @@
   <a class="call" href="tel:0966026499">📞 0966.026.499</a>
 </div></header>
 
-<section class="hero"><div class="wrap grid">
-  <div>
-    <span class="tag">🎉 Tết đến nơi rồi – Chốt việc ngay thôi!</span>
-    <h1>Tuyển <b>300</b> lao động phổ thông</h1>
-    <p class="lead">Sản xuất · Kho · Chất lượng — <strong>Lương tốt, chế độ tốt</strong> tại CCN Hạp Lĩnh, Bắc Ninh.</p>
-    <div class="money">
-      <div><small>Lương cơ bản</small><strong>6.000.000đ</strong></div>
-      <div><small>Tổng thu nhập</small><strong>9 – 15 triệu/tháng</strong></div>
+<section class="hero" id="top">
+  <div class="fx" id="fx" aria-hidden="true"></div>
+  <div class="wrap grid">
+    <div>
+      <span class="tag">🧧 Tết đến nơi rồi – Chốt việc ngay thôi!</span>
+      <h1 aria-label="Tuyển 300 lao động phổ thông">
+        <span class="w" style="animation-delay:.05s">Tuyển</span>
+        <span class="w big300" style="animation-delay:.2s"><span data-count="300">300</span></span>
+        <span class="w" style="animation-delay:.35s">lao động</span>
+        <span class="w" style="animation-delay:.5s">phổ thông</span>
+      </h1>
+      <div class="rot" aria-live="polite">Bộ phận: <span class="word" id="rotWord">Sản xuất</span></div>
+      <div class="money">
+        <div><small>Lương cơ bản</small><strong class="shine"><span data-count="6000000" data-format="vnd">6.000.000</span>đ</strong></div>
+        <div><small>Tổng thu nhập</small><strong class="shine"><span data-count="9">9</span>–<span data-count="15">15</span> triệu</strong></div>
+      </div>
+      <div class="cta">
+        <a class="btn btn-go glow" href="#dang-ky">✍️ Đăng ký trong 1 phút</a>
+        <a class="btn btn-ghost" href="tel:0966026499">📞 Gọi hotline</a>
+      </div>
     </div>
-    <div class="cta">
-      <a class="btn btn-go" href="#dang-ky">✍️ Đăng ký ứng tuyển</a>
-      <a class="btn btn-line" href="tel:0966026499">📞 Gọi hotline</a>
+    <div class="poster-wrap">
+      <img src="img/poster-tuyendung.webp" alt="Poster tuyển dụng IL-Sung Tech: 300 lao động phổ thông, lương cơ bản 6 triệu, thu nhập 9-15 triệu" width="900" height="1271" fetchpriority="high">
+      <div class="sticker">HOT 🔥</div>
     </div>
   </div>
-  <img class="poster" src="img/poster-tuyendung.webp" alt="Poster tuyển dụng IL-Sung Tech: 300 lao động phổ thông, lương cơ bản 6 triệu, thu nhập 9-15 triệu" width="900" height="1271">
-</div></section>
+</section>
+
+<div class="marquee" aria-hidden="true"><div class="track" id="mq"></div></div>
 
 <section id="phuc-loi"><div class="wrap">
-  <h2>Chế độ nổi bật</h2>
-  <p class="sub">IL-Sung Tech – công ty TOP đầu về lương cơ bản trong khu vực.</p>
+  <h2 class="reveal">Chế độ <span class="hl">nổi bật</span></h2>
+  <p class="sub reveal">IL-Sung Tech – công ty TOP đầu về lương cơ bản trong khu vực.</p>
   <div class="cards">
-    <div class="card"><div class="ic" aria-hidden="true">💰</div><h3>Thu nhập 9–15 triệu</h3><p>Lương cơ bản 6.000.000đ, cộng phụ cấp, chuyên cần và tăng ca theo quy định.</p></div>
-    <div class="card"><div class="ic" aria-hidden="true">🏠</div><h3>Miễn phí ký túc xá</h3><p>Ở KTX miễn phí, thuận tiện cho người ở xa.</p></div>
-    <div class="card"><div class="ic" aria-hidden="true">🚌</div><h3>Miễn phí xe đưa đón</h3><p>Xe bus tuyến Yên Phong ⇄ Công ty IL-Sung Tech.</p></div>
-    <div class="card"><div class="ic" aria-hidden="true">🍜</div><h3>Bữa ăn cuối giờ miễn phí</h3><p>Có bữa ăn cuối giờ, kể cả khi không tăng ca.</p></div>
+    <div class="card reveal"><div class="ic" aria-hidden="true">💰</div><div class="num">9–15 triệu</div><h3>Tổng thu nhập/tháng</h3><p>Lương cơ bản 6.000.000đ cộng phụ cấp, chuyên cần và tăng ca theo quy định.</p></div>
+    <div class="card reveal"><div class="ic" aria-hidden="true">🏠</div><h3>Miễn phí ký túc xá</h3><p>Ở KTX miễn phí, thuận tiện cho người ở xa.</p></div>
+    <div class="card reveal"><div class="ic" aria-hidden="true">🚌</div><h3>Miễn phí xe đưa đón</h3><p>Xe bus tuyến Yên Phong ⇄ Công ty IL-Sung Tech.</p></div>
+    <div class="card reveal"><div class="ic" aria-hidden="true">🍜</div><h3>Bữa ăn cuối giờ miễn phí</h3><p>Có bữa ăn cuối giờ, kể cả khi không tăng ca.</p></div>
   </div>
-  <div class="bus"><span style="font-size:34px" aria-hidden="true">🚌</span><div><b>Có xe bus đưa đón miễn phí</b><br>Tuyến Yên Phong ⇄ Công ty IL-Sung Tech. Đăng ký nhu cầu đi xe ngay trong form.</div></div>
+  <div class="bus reveal"><span class="ride" aria-hidden="true">🚌</span><div><b>Có xe bus đưa đón miễn phí</b><br>Tuyến Yên Phong ⇄ Công ty IL-Sung Tech. Chọn “Đi xe đưa đón” khi đăng ký.</div></div>
 </div></section>
 
 <section id="vi-tri" class="jobs" style="padding-top:0"><div class="wrap">
-  <h2>Vị trí đang tuyển</h2>
-  <p class="sub">Lao động phổ thông, không yêu cầu kinh nghiệm – được đào tạo khi vào làm.</p>
+  <h2 class="reveal">Vị trí <span class="hl">đang tuyển</span></h2>
+  <p class="sub reveal">Lao động phổ thông, không cần kinh nghiệm – được đào tạo khi vào làm.</p>
   <div class="cards">
-    <div class="card"><h3>🏭 Sản xuất</h3><p>Lắp ráp, vận hành dây chuyền linh kiện điện tử.</p></div>
-    <div class="card"><h3>📦 Kho</h3><p>Nhập – xuất – sắp xếp vật tư, hàng hoá.</p></div>
-    <div class="card"><h3>🔍 Chất lượng</h3><p>Kiểm tra ngoại quan, đảm bảo chất lượng sản phẩm.</p></div>
+    <div class="card reveal"><div class="ic" aria-hidden="true">🏭</div><h3>Sản xuất</h3><p>Lắp ráp, vận hành dây chuyền linh kiện điện tử.</p></div>
+    <div class="card reveal"><div class="ic" aria-hidden="true">📦</div><h3>Kho</h3><p>Nhập – xuất – sắp xếp vật tư, hàng hoá.</p></div>
+    <div class="card reveal"><div class="ic" aria-hidden="true">🔍</div><h3>Chất lượng</h3><p>Kiểm tra ngoại quan, đảm bảo chất lượng sản phẩm.</p></div>
   </div>
 </div></section>
 
-<section class="banner" style="padding-top:0"><div class="wrap">
+<section class="banner" style="padding-top:0"><div class="wrap reveal">
   <img src="img/banner-tet.webp" alt="Tết đến nơi rồi – Chốt việc ngay thôi! Nhân viên IL-Sung Tech nhận quà Tết" width="1600" height="266" loading="lazy">
 </div></section>
 
+<!-- ======================= FORM KIEU WAYGROUND ======================= -->
 <section id="dang-ky"><div class="wrap">
-  <h2 style="text-align:center">Đăng ký ứng tuyển</h2>
-  <p class="sub" style="text-align:center">Chỉ 1 phút – bộ phận tuyển dụng sẽ gọi lại cho bạn.</p>
-  <div class="formbox">
-    <form id="f" novalidate>
-      <label class="f" for="ho_ten">Họ và tên <em>*</em></label>
-      <input id="ho_ten" name="ho_ten" type="text" autocomplete="name" maxlength="80" required placeholder="Nguyễn Văn A">
-      <div class="err" data-for="ho_ten"></div>
-      <div class="row2">
-        <div><label class="f" for="sdt">Số điện thoại <em>*</em></label>
-          <input id="sdt" name="sdt" type="tel" inputmode="tel" autocomplete="tel" maxlength="15" required placeholder="09xx xxx xxx">
-          <div class="err" data-for="sdt"></div></div>
-        <div><label class="f" for="nam_sinh">Năm sinh</label>
-          <input id="nam_sinh" name="nam_sinh" type="number" inputmode="numeric" min="1960" max="2012" placeholder="2003">
-          <div class="err" data-for="nam_sinh"></div></div>
-      </div>
-      <label class="f" for="dia_chi">Địa chỉ</label>
-      <input id="dia_chi" name="dia_chi" type="text" autocomplete="street-address" maxlength="200" placeholder="Xã/phường, huyện, tỉnh">
-      <label class="f">Vị trí mong muốn</label>
-      <div class="chips" role="radiogroup">
-        <label><input type="radio" name="vi_tri" value="san_xuat"> Sản xuất</label>
-        <label><input type="radio" name="vi_tri" value="kho"> Kho</label>
-        <label><input type="radio" name="vi_tri" value="chat_luong"> Chất lượng</label>
-        <label><input type="radio" name="vi_tri" value="bat_ky" checked> Vị trí nào cũng được</label>
-      </div>
-      <label class="f">Nhu cầu</label>
-      <div class="chips">
-        <label><input type="checkbox" name="can_ktx"> Ở ký túc xá</label>
-        <label><input type="checkbox" name="can_xe"> Đi xe đưa đón</label>
-      </div>
-      <label class="f" for="nguon">Bạn biết tin tuyển dụng qua đâu?</label>
-      <select id="nguon" name="nguon">
-        <option value="poster">Poster / tờ rơi</option><option value="tiktok">TikTok</option><option value="zalo">Zalo</option>
-        <option value="facebook">Facebook</option><option value="nguoi_quen">Người quen giới thiệu</option><option value="khac">Khác</option>
-      </select>
-      <div class="hp" aria-hidden="true"><label>Website <input name="website" tabindex="-1" autocomplete="off"></label></div>
-      <label class="consent"><input type="checkbox" name="dong_y" id="dong_y">
-        <span>Tôi đồng ý để Công ty IL-Sung Tech sử dụng thông tin trên để liên hệ tuyển dụng. Thông tin chỉ dùng cho mục đích tuyển dụng và không chia sẻ cho bên thứ ba.</span></label>
-      <div class="err" data-for="dong_y"></div>
-      <div class="err" data-for="_" role="alert"></div>
-      <button class="btn btn-go submit" type="submit" id="send">Gửi đăng ký</button>
-    </form>
-    <div class="done" id="done" hidden>
-      <div class="ok" aria-hidden="true">✓</div>
-      <h3 style="margin:6px 0;color:var(--navy);font-size:22px">Đăng ký thành công!</h3>
-      <p id="doneMsg">Mã đăng ký của bạn:</p>
-      <p><code id="ma"></code></p>
-      <p>Bộ phận tuyển dụng sẽ gọi lại sớm. Cần gấp? Gọi <a href="tel:0966026499"><b>0966.026.499</b></a></p>
-      <button class="btn btn-line" type="button" id="again">Đăng ký cho người khác</button>
+  <h2 style="text-align:center" class="reveal">Đăng ký <span class="hl">ứng tuyển</span></h2>
+  <p class="sub reveal" style="text-align:center">Trả lời vài câu hỏi nhanh – chọn là sang câu tiếp theo.</p>
+  <div class="quiz" id="quiz">
+    <div class="qhead">
+      <button class="qback" id="qback" type="button" aria-label="Quay lại câu trước">←</button>
+      <div class="qprog"><div class="bar"><i id="qbar"></i></div><small id="qcount">Câu 1/9</small></div>
     </div>
+    <div id="qstep"></div>
+    <div class="hp" aria-hidden="true"><label>Website <input id="website" tabindex="-1" autocomplete="off"></label></div>
   </div>
 </div></section>
 
 <section id="lien-he"><div class="wrap">
-  <h2>Liên hệ đi làm ngay</h2>
+  <h2 class="reveal">Liên hệ <span class="hl">đi làm ngay</span></h2>
   <div class="contact">
-    <div class="card"><h3>📞 Hotline tuyển dụng</h3><p><a href="tel:0966026499" style="font-size:24px;font-weight:900;text-decoration:none">0966.026.499</a></p></div>
-    <div class="card"><h3>📍 Địa chỉ</h3><p>CCN Hạp Lĩnh – Phường Hạp Lĩnh – TP. Bắc Ninh</p>
+    <div class="card reveal"><h3>📞 Hotline tuyển dụng</h3><a class="hot" href="tel:0966026499">0966.026.499</a></div>
+    <div class="card reveal"><h3>📍 Địa chỉ</h3><p>CCN Hạp Lĩnh – Phường Hạp Lĩnh – TP. Bắc Ninh</p>
       <p style="margin-top:8px"><a href="https://www.google.com/maps/search/?api=1&query=C%C3%B4ng+ty+IL-Sung+Tech+CCN+H%E1%BA%A1p+L%C4%A9nh+B%E1%BA%AFc+Ninh" target="_blank" rel="noopener">Mở bản đồ ›</a></p></div>
-    <div class="card"><h3>💬 Mạng xã hội</h3><div class="social" id="social"></div></div>
+    <div class="card reveal"><h3>💬 Mạng xã hội</h3><div class="social" id="social"></div></div>
   </div>
 </div></section>
 
 <section id="hinh-anh" style="padding-top:0"><div class="wrap">
-  <h2>Hình ảnh</h2>
-  <div class="gallery">
-    <img src="img/poster-luong.webp" alt="Poster: công ty TOP đầu về lương cơ bản, thu nhập 9-15 triệu/tháng" loading="lazy" width="900" height="1350">
-    <img src="img/poster-xe.webp" alt="Poster: có xe đưa đón miễn phí đến công ty" loading="lazy" width="900" height="1349">
-    <img src="img/poster-lienhe.webp" alt="Poster: liên hệ đi làm ngay, hotline 0966.026.499" loading="lazy" width="900" height="1271">
+  <h2 class="reveal">Hình ảnh</h2>
+  <p class="sub reveal">Vuốt ngang để xem, chạm để phóng to.</p>
+  <div class="carousel">
+    <figure><img src="img/poster-tuyendung.webp" alt="Poster tuyển 300 lao động phổ thông" loading="lazy" width="900" height="1271"></figure>
+    <figure><img src="img/poster-luong.webp" alt="Poster: công ty TOP đầu về lương cơ bản" loading="lazy" width="900" height="1350"></figure>
+    <figure><img src="img/poster-xe.webp" alt="Poster: có xe đưa đón miễn phí" loading="lazy" width="900" height="1349"></figure>
+    <figure><img src="img/poster-lienhe.webp" alt="Poster: liên hệ đi làm ngay, hotline 0966.026.499" loading="lazy" width="900" height="1271"></figure>
   </div>
 </div></section>
 
@@ -211,7 +270,7 @@
   <b style="color:#fff">Công ty IL-Sung Tech</b> · CCN Hạp Lĩnh, Phường Hạp Lĩnh, TP. Bắc Ninh · Hotline <a href="tel:0966026499">0966.026.499</a>
 </div></footer>
 
-<div class="sticky-cta"><a class="btn btn-line" href="tel:0966026499">📞 Gọi ngay</a><a class="btn btn-go" href="#dang-ky">✍️ Đăng ký</a></div>
+<div class="sticky-cta" id="sticky"><a class="btn btn-line" href="tel:0966026499">📞 Gọi ngay</a><a class="btn btn-go" href="#dang-ky">✍️ Đăng ký</a></div>
 <div class="lightbox" id="lb" role="dialog" aria-label="Xem ảnh"><img alt=""></div>
 
 <script>
@@ -221,53 +280,175 @@ const API_BASE = location.hostname.endsWith("github.io") ? "https://pocketbase.i
 // ---- Link mạng xã hội: sửa tại đây (để trống = ẩn nút) ----
 const SOCIAL = { zalo: "https://zaloapp.com/qr/p/qvgb5egan8t8", facebook: "https://q.me-qr.com/xlc5sc21", tiktok: "https://vt.tiktok.com/ZSgg3tarX/" }; // lay tu ma QR tren poster
 
-(function () {
-  const icons = { zalo: "💬 Zalo", facebook: "📘 Facebook", tiktok: "🎵 TikTok" };
-  const box = document.getElementById("social");
-  const links = Object.entries(SOCIAL).filter(([, u]) => u);
-  box.innerHTML = links.length ? links.map(([k, u]) => `<a href="${u}" target="_blank" rel="noopener">${icons[k]}</a>`).join("") : "<p>Quét mã QR trên poster hoặc gọi hotline.</p>";
+const REDUCED = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  // nguon tu QR: ?src=tiktok|zalo|facebook|poster
+/* ================= hiệu ứng ================= */
+(function effects() {
+  // marquee: lặp 2 lần để chạy liền mạch
+  const items = ["💰 Lương cơ bản 6.000.000đ", "📈 Thu nhập 9–15 triệu/tháng", "🏠 Miễn phí KTX", "🚌 Miễn phí xe đưa đón Yên Phong", "🍜 Bữa ăn cuối giờ miễn phí", "🎯 Tuyển 300 lao động phổ thông", "🏭 Sản xuất · Kho · Chất lượng"];
+  document.getElementById("mq").innerHTML = [...items, ...items].map((t) => `<span>${t}</span>`).join("");
+
+  // chữ luân phiên bộ phận
+  const words = ["Sản xuất", "Kho", "Chất lượng"]; let wi = 0;
+  if (!REDUCED) setInterval(() => { wi = (wi + 1) % words.length; const s = document.createElement("span"); s.className = "word"; s.id = "rotWord"; s.textContent = words[wi]; document.getElementById("rotWord").replaceWith(s); }, 2200);
+
+  // đếm số khi hiện ra
+  const fmt = (n, f) => (f === "vnd" ? n.toLocaleString("vi-VN") : String(n));
+  const countUp = (el) => {
+    const end = +el.dataset.count, f = el.dataset.format;
+    if (REDUCED) { el.textContent = fmt(end, f); return; }
+    const t0 = performance.now(), dur = 1400;
+    const tick = (t) => { const p = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - p, 3); el.textContent = fmt(Math.round(end * e), f); if (p < 1) requestAnimationFrame(tick); };
+    requestAnimationFrame(tick);
+  };
+  document.querySelectorAll("[data-count]").forEach((el) => countUp(el));
+
+  // hiện dần khi cuộn tới
+  const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }), { threshold: .15 });
+  document.querySelectorAll(".reveal").forEach((el, i) => { el.style.transitionDelay = (i % 4) * 80 + "ms"; io.observe(el); });
+
+  // ẩn thanh nút dưới khi đang ở form
+  const sticky = document.getElementById("sticky");
+  new IntersectionObserver(([e]) => sticky.classList.toggle("hide", e.isIntersecting), { threshold: .2 }).observe(document.getElementById("dang-ky"));
+
+  if (REDUCED) return;
+  // hoa mai rơi
+  const fx = document.getElementById("fx");
+  const flowers = ["🌼", "🌸", "🌼", "✨", "🧧"];
+  for (let i = 0; i < 16; i++) {
+    const p = document.createElement("span"); p.className = "petal"; p.textContent = flowers[i % flowers.length];
+    p.style.left = Math.random() * 100 + "%"; p.style.fontSize = 14 + Math.random() * 16 + "px";
+    p.style.setProperty("--dx", (Math.random() * 120 - 60) + "px");
+    p.style.animationDuration = 7 + Math.random() * 8 + "s"; p.style.animationDelay = -Math.random() * 12 + "s";
+    fx.appendChild(p);
+  }
+  // pháo hoa
+  const colors = ["#fde047", "#86efac", "#f87171", "#fff", "#fbbf24"];
+  const boom = () => {
+    if (document.hidden) return;
+    const fw = document.createElement("div"); fw.className = "firework";
+    fw.style.left = 10 + Math.random() * 80 + "%"; fw.style.top = 8 + Math.random() * 40 + "%";
+    const c = colors[Math.floor(Math.random() * colors.length)];
+    for (let k = 0; k < 18; k++) { const a = (k / 18) * Math.PI * 2, r = 50 + Math.random() * 40, s = document.createElement("i");
+      s.style.setProperty("--x", Math.cos(a) * r + "px"); s.style.setProperty("--y", Math.sin(a) * r + "px"); s.style.setProperty("--c", c); fw.appendChild(s); }
+    fx.appendChild(fw); setTimeout(() => fw.remove(), 1500);
+  };
+  setInterval(boom, 1600); boom();
+})();
+
+/* ================= form kiểu Wayground ================= */
+(function quiz() {
   const src = new URLSearchParams(location.search).get("src");
-  const sel = document.getElementById("nguon");
-  if (src && [...sel.options].some((o) => o.value === src)) sel.value = src;
+  const A = { ho_ten: "", sdt: "", nam_sinh: "", vi_tri: "", can_ktx: null, can_xe: null, nguon: ["tiktok", "zalo", "facebook", "poster", "nguoi_quen", "khac"].includes(src) ? src : "", dia_chi: "" };
+  const LBL = { san_xuat: "Sản xuất", kho: "Kho", chat_luong: "Chất lượng", bat_ky: "Vị trí nào cũng được", tiktok: "TikTok", zalo: "Zalo", facebook: "Facebook", poster: "Poster / tờ rơi", nguoi_quen: "Người quen", khac: "Khác" };
+  const yes = [["true", "Có", "👍", "c2"], ["false", "Không", "🙅", "c4"]];
+  const STEPS = [
+    { k: "ho_ten", type: "text", q: "Bạn tên là gì?", hint: "Họ và tên đầy đủ", ph: "Nguyễn Văn A", ac: "name",
+      check: (v) => (v.trim().length >= 2 ? "" : "Vui lòng nhập họ tên") },
+    { k: "sdt", type: "tel", q: (a) => `Chào ${a.ho_ten.split(" ").pop()}! Số điện thoại của bạn?`, hint: "Để bộ phận tuyển dụng gọi lại", ph: "09xx xxx xxx", ac: "tel",
+      check: (v) => (/^0[35789]\d{8}$/.test(v.replace(/[^\d]/g, "")) ? "" : "Số điện thoại chưa đúng (10 số, ví dụ 0966026499)") },
+    { k: "nam_sinh", type: "number", q: "Bạn sinh năm bao nhiêu?", hint: "Có thể bỏ qua", ph: "2003", optional: true,
+      check: (v) => { if (!v) return ""; const y = +v, now = new Date().getFullYear(); return y >= now - 65 && y <= now - 15 ? "" : "Năm sinh chưa đúng"; } },
+    { k: "vi_tri", type: "choice", q: "Bạn muốn làm ở bộ phận nào?", opts: [["san_xuat", "Sản xuất", "🏭", "c1"], ["kho", "Kho", "📦", "c2"], ["chat_luong", "Chất lượng", "🔍", "c3"], ["bat_ky", "Nào cũng được", "🙌", "c5"]] },
+    { k: "can_ktx", type: "choice", q: "Bạn có cần ở ký túc xá miễn phí không?", opts: yes },
+    { k: "can_xe", type: "choice", q: "Bạn có đi xe đưa đón miễn phí (Yên Phong ⇄ công ty) không?", opts: yes },
+    { k: "nguon", type: "choice", q: "Bạn biết tin tuyển dụng qua đâu?", opts: [["tiktok", "TikTok", "🎵", "c1"], ["zalo", "Zalo", "💬", "c6"], ["facebook", "Facebook", "📘", "c5"], ["poster", "Poster / tờ rơi", "📄", "c3"], ["nguoi_quen", "Người quen", "🤝", "c2"], ["khac", "Khác", "✨", "c4"]] },
+    { k: "dia_chi", type: "text", q: "Bạn đang ở đâu?", hint: "Xã/phường, huyện, tỉnh – có thể bỏ qua", ph: "Đông Phong, Yên Phong, Bắc Ninh", ac: "street-address", optional: true, check: () => "" },
+    { k: "_confirm", type: "confirm", q: "Kiểm tra lại & gửi nhé!" },
+  ];
+  let i = 0, sending = false;
+  const box = document.getElementById("qstep"), back = document.getElementById("qback");
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const title = (s) => (typeof s.q === "function" ? s.q(A) : s.q);
 
-  const f = document.getElementById("f"), btn = document.getElementById("send");
-  const showErr = (errs) => document.querySelectorAll(".err").forEach((el) => (el.textContent = (errs && errs[el.dataset.for]) || ""));
-  const VN = { ho_ten: "Vui lòng nhập họ tên", sdt: "Số điện thoại chưa đúng (10 số, ví dụ 0966026499)", nam_sinh: "Năm sinh chưa đúng", dong_y: "Vui lòng tick đồng ý để công ty liên hệ" };
-  f.addEventListener("submit", async (ev) => {
-    ev.preventDefault();
-    const d = new FormData(f);
-    const body = { ho_ten: d.get("ho_ten"), sdt: d.get("sdt"), nam_sinh: d.get("nam_sinh") || undefined, dia_chi: d.get("dia_chi"),
-      vi_tri: d.get("vi_tri"), can_ktx: d.get("can_ktx") === "on", can_xe: d.get("can_xe") === "on", nguon: d.get("nguon"),
-      dong_y: d.get("dong_y") === "on", website: d.get("website") };
-    const local = {};
-    if (!String(body.ho_ten || "").trim()) local.ho_ten = VN.ho_ten;
-    if (!/^0[35789]\d{8}$/.test(String(body.sdt || "").replace(/[^\d]/g, ""))) local.sdt = VN.sdt;
-    if (!body.dong_y) local.dong_y = VN.dong_y;
-    if (Object.keys(local).length) { showErr(local); return; }
-    showErr(null); btn.disabled = true; btn.textContent = "Đang gửi…";
+  function render(dir) {
+    const s = STEPS[i];
+    document.getElementById("qbar").style.width = ((i) / (STEPS.length - 1)) * 100 + "%";
+    document.getElementById("qcount").textContent = s.type === "confirm" ? "Bước cuối" : `Câu ${i + 1}/${STEPS.length - 1}`;
+    back.disabled = i === 0;
+    let h = `<div class="step ${dir === "back" ? "back" : ""}"><div class="qcard"><h3>${esc(title(s))}${s.hint ? `<small>${esc(s.hint)}</small>` : ""}</h3></div>`;
+    if (s.type === "choice") {
+      h += `<div class="answers ${s.opts.length > 4 ? "" : ""}">` + s.opts.map(([v, t, e, c]) =>
+        `<button type="button" class="opt ${c} ${String(A[s.k]) === v ? "sel" : ""}" data-v="${v}"><span class="e">${e}</span>${esc(t)}</button>`).join("") + "</div>";
+    } else if (s.type === "confirm") {
+      const row = (k, v) => `<div><span>${k}</span><b>${esc(v || "–")}</b></div>`;
+      h += `<div class="summary">${row("Họ tên", A.ho_ten)}${row("Điện thoại", A.sdt)}${row("Năm sinh", A.nam_sinh)}${row("Bộ phận", LBL[A.vi_tri])}${row("Ở KTX", A.can_ktx ? "Có" : "Không")}${row("Đi xe đưa đón", A.can_xe ? "Có" : "Không")}${row("Biết tin qua", LBL[A.nguon])}${row("Địa chỉ", A.dia_chi)}</div>
+        <label class="consent"><input type="checkbox" id="dong_y"> <span>Tôi đồng ý để Công ty IL-Sung Tech dùng thông tin trên để liên hệ tuyển dụng. Thông tin không chia sẻ cho bên thứ ba.</span></label>
+        <div class="qerr" id="qerr" role="alert"></div>
+        <div class="qnext"><button class="btn btn-go glow" type="button" id="send">🚀 Gửi đăng ký</button></div>`;
+    } else {
+      h += `<div class="inwrap"><input id="qin" type="${s.type === "number" ? "text" : s.type}" ${s.type === "number" ? 'inputmode="numeric" maxlength="4"' : ""} ${s.type === "tel" ? 'inputmode="tel" maxlength="15"' : 'maxlength="200"'} autocomplete="${s.ac || "off"}" placeholder="${esc(s.ph)}" value="${esc(A[s.k])}" aria-label="${esc(title(s))}"></div>
+        <div class="qerr" id="qerr" role="alert"></div>
+        <div class="qnext">${s.optional ? '<button class="btn skip" type="button" id="skip">Bỏ qua</button>' : ""}<button class="btn btn-go" type="button" id="next">Tiếp →</button></div>`;
+    }
+    box.innerHTML = h + "</div>";
+    if (s.type === "choice") box.querySelectorAll(".opt").forEach((b) => b.addEventListener("click", () => {
+      box.querySelectorAll(".opt").forEach((x) => x.classList.remove("sel")); b.classList.add("sel");
+      const v = b.dataset.v; A[s.k] = v === "true" ? true : v === "false" ? false : v;
+      setTimeout(() => go(1), REDUCED ? 0 : 280);           // chọn xong tự sang câu sau
+    }));
+    else if (s.type === "confirm") document.getElementById("send").addEventListener("click", submit);
+    else {
+      const inp = document.getElementById("qin");
+      const next = () => { const err = s.check(inp.value); if (err) { document.getElementById("qerr").textContent = err; inp.focus(); return; } A[s.k] = inp.value.trim(); go(1); };
+      document.getElementById("next").addEventListener("click", next);
+      inp.addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); next(); } });
+      const sk = document.getElementById("skip"); if (sk) sk.addEventListener("click", () => { A[s.k] = ""; go(1); });
+      if (dir) setTimeout(() => inp.focus({ preventScroll: true }), 60);
+    }
+  }
+  function go(d) { i = Math.max(0, Math.min(STEPS.length - 1, i + d)); render(d < 0 ? "back" : "next"); }
+  back.addEventListener("click", () => go(-1));
+
+  async function submit() {
+    if (sending) return;
+    const err = document.getElementById("qerr");
+    if (!document.getElementById("dong_y").checked) { err.textContent = "Vui lòng tick đồng ý để công ty liên hệ"; return; }
+    sending = true; const btn = document.getElementById("send"); btn.disabled = true; btn.textContent = "Đang gửi…"; err.textContent = "";
+    const body = { ho_ten: A.ho_ten, sdt: A.sdt, nam_sinh: A.nam_sinh || undefined, dia_chi: A.dia_chi, vi_tri: A.vi_tri || "bat_ky",
+      can_ktx: A.can_ktx === true, can_xe: A.can_xe === true, nguon: A.nguon || "khac", dong_y: true, website: document.getElementById("website").value };
     try {
       const r = await fetch(API_BASE + "/api/tuyendung/dang-ky", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body) });
       const j = await r.json().catch(() => ({}));
+      if (r.status === 429) throw Object.assign(new Error(), { userMsg: "Bạn gửi quá nhiều lần, vui lòng thử lại sau ít phút." });
       if (!r.ok || !j.ok) {
         const e = j.errors || {};
-        showErr(Object.fromEntries(Object.keys(e).map((k) => [k, VN[k] || "Không gửi được, vui lòng thử lại hoặc gọi hotline 0966.026.499"])));
-        if (r.status === 429) showErr({ _: "Bạn gửi quá nhiều lần, vui lòng thử lại sau ít phút." });
-        return;
+        if (e.sdt) { i = 1; render("back"); document.getElementById("qerr").textContent = "Số điện thoại chưa đúng (10 số)"; return; }
+        if (e.ho_ten) { i = 0; render("back"); document.getElementById("qerr").textContent = "Vui lòng nhập họ tên"; return; }
+        throw Object.assign(new Error(), { userMsg: "Không gửi được, vui lòng thử lại hoặc gọi hotline 0966.026.499" });
       }
-      document.getElementById("ma").textContent = j.ma;
-      document.getElementById("doneMsg").textContent = j.trung ? "Số điện thoại này đã đăng ký gần đây. Mã đăng ký:" : "Mã đăng ký của bạn:";
-      f.hidden = true; document.getElementById("done").hidden = false;
-      document.getElementById("dang-ky").scrollIntoView({ behavior: "smooth" });
-    } catch (_) {
-      showErr({ _: "Mất kết nối mạng. Vui lòng thử lại hoặc gọi hotline 0966.026.499" });
-    } finally { btn.disabled = false; btn.textContent = "Gửi đăng ký"; }
-  });
-  document.getElementById("again").addEventListener("click", () => { f.reset(); f.hidden = false; document.getElementById("done").hidden = true; });
+      document.getElementById("qbar").style.width = "100%";
+      document.getElementById("qcount").textContent = "Hoàn thành 🎉"; back.disabled = true;
+      box.innerHTML = `<div class="step done"><div class="ok" aria-hidden="true">✓</div>
+        <h3 style="margin:4px 0 6px;font-size:24px">${j.trung ? "Bạn đã đăng ký rồi!" : "Đăng ký thành công!"}</h3>
+        <p style="margin:0 0 10px;opacity:.95">${j.trung ? "Số điện thoại này đã đăng ký gần đây. Mã đăng ký:" : "Mã đăng ký của bạn:"}</p>
+        <p><code id="ma">${esc(j.ma)}</code></p>
+        <p style="opacity:.95">Bộ phận tuyển dụng sẽ gọi lại sớm. Cần gấp? Gọi <a href="tel:0966026499" style="color:#fde047"><b>0966.026.499</b></a></p>
+        <button class="btn btn-ghost" type="button" id="again">Đăng ký cho người khác</button></div>`;
+      document.getElementById("again").addEventListener("click", () => { Object.assign(A, { ho_ten: "", sdt: "", nam_sinh: "", vi_tri: "", can_ktx: null, can_xe: null, dia_chi: "" }); i = 0; render("back"); });
+      document.getElementById("quiz").scrollIntoView({ behavior: REDUCED ? "auto" : "smooth", block: "start" });
+      confetti();
+    } catch (e) {
+      err.textContent = e.userMsg || "Mất kết nối mạng. Vui lòng thử lại hoặc gọi hotline 0966.026.499";
+    } finally { sending = false; const b = document.getElementById("send"); if (b) { b.disabled = false; b.textContent = "🚀 Gửi đăng ký"; } }
+  }
+  function confetti() {
+    if (REDUCED) return;
+    const q = document.getElementById("quiz"), cs = ["#fde047", "#86efac", "#f87171", "#60a5fa", "#fff", "#c084fc"];
+    for (let k = 0; k < 60; k++) { const c = document.createElement("i"); c.className = "confetti";
+      c.style.left = Math.random() * 100 + "%"; c.style.background = cs[k % cs.length]; c.style.setProperty("--x", (Math.random() * 160 - 80) + "px");
+      c.style.animationDelay = Math.random() * .4 + "s"; q.appendChild(c); setTimeout(() => c.remove(), 2600); }
+  }
+  render();
+})();
 
+/* ================= khác ================= */
+(function misc() {
+  const icons = { zalo: "💬 Zalo", facebook: "📘 Facebook", tiktok: "🎵 TikTok" };
+  const links = Object.entries(SOCIAL).filter(([, u]) => u);
+  document.getElementById("social").innerHTML = links.length ? links.map(([k, u]) => `<a href="${u}" target="_blank" rel="noopener">${icons[k]}</a>`).join("") : "<p>Quét mã QR trên poster hoặc gọi hotline.</p>";
   const lb = document.getElementById("lb");
-  document.querySelectorAll(".gallery img, .hero img.poster").forEach((im) => im.addEventListener("click", () => { lb.querySelector("img").src = im.src; lb.classList.add("on"); }));
+  document.querySelectorAll(".carousel img, .poster-wrap img").forEach((im) => im.addEventListener("click", () => { lb.querySelector("img").src = im.src; lb.classList.add("on"); }));
   lb.addEventListener("click", () => lb.classList.remove("on"));
 })();
 </script>

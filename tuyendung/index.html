@@ -415,7 +415,7 @@ const REDUCED = matchMedia("(prefers-reduced-motion: reduce)").matches;
         const e = j.errors || {};
         if (e.sdt) { i = 1; render("back"); document.getElementById("qerr").textContent = "Số điện thoại chưa đúng (10 số)"; return; }
         if (e.ho_ten) { i = 0; render("back"); document.getElementById("qerr").textContent = "Vui lòng nhập họ tên"; return; }
-        throw Object.assign(new Error(), { userMsg: "Không gửi được, vui lòng thử lại hoặc gọi hotline 0966.026.499" });
+        throw Object.assign(new Error(), { userMsg: `Không gửi được (mã lỗi ${r.status}${j.message ? ": " + j.message : ""}). Vui lòng thử lại hoặc gọi hotline 0966.026.499` });
       }
       document.getElementById("qbar").style.width = "100%";
       document.getElementById("qcount").textContent = "Hoàn thành 🎉"; back.disabled = true;

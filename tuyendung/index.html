@@ -275,8 +275,8 @@ footer a{color:#fff}
 
 <script>
 // ---- Nơi nhận đăng ký (PocketBase ORG) ----
-// Trang đặt trên GitHub Pages -> gửi về địa chỉ đầy đủ của ORG; đặt trong ORG -> cùng tên miền (kể cả sau /org/).
-const API_BASE = location.hostname.endsWith("github.io") ? "https://pocketbase.il-sungtech.com/org" : location.pathname.split("/tuyendung")[0];
+// Trang đặt trên GitHub Pages -> gửi về PocketBase ORG ở gốc tên miền (/api/..., không qua /org/); đặt trong ORG -> cùng tên miền.
+const API_BASE = location.hostname.endsWith("github.io") ? "https://pocketbase.il-sungtech.com" : location.pathname.split("/tuyendung")[0];
 // ---- Link mạng xã hội: sửa tại đây (để trống = ẩn nút) ----
 const SOCIAL = { zalo: "https://zaloapp.com/qr/p/qvgb5egan8t8", facebook: "https://q.me-qr.com/xlc5sc21", tiktok: "https://vt.tiktok.com/ZSgg3tarX/" }; // lay tu ma QR tren poster
 

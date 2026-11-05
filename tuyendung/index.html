@@ -641,7 +641,7 @@ const FALLBACK = /*FALLBACK_START*/{"cau_hoi":[{"goi_y":"","kiem_tra":{},"lua_ch
     if (/^#[0-9a-f]{6}$/i.test(G.mau_nhan || "")) r.setProperty("--accent", G.mau_nhan);
     const nen = img((G.anh || {}).nen); if (nen) r.setProperty("--nen", "url(\"" + nen.replace(/"/g, "") + "\")");
     const logo = img((G.anh || {}).logo), N = CFG.noi_dung || {};
-    $("#brand").innerHTML = logo ? `<img src="${esc(logo)}" alt="${esc(N.thuong_hieu || "IL SUNG TECH")}">` : `<span class="mark" aria-hidden="true"></span><span>${esc(N.thuong_hieu || "IL SUNG TECH")}</span>`;
+    $("#brand").innerHTML = N.an_logo ? `<span>${esc(N.thuong_hieu || "")}</span>` : logo ? `<img src="${esc(logo)}" alt="${esc(N.thuong_hieu || "IL SUNG TECH")}">` : `<span class="mark" aria-hidden="true"></span><span>${esc(N.thuong_hieu || "IL SUNG TECH")}</span>`;
     if (N.tieu_de) document.title = "Đăng ký tuyển dụng – " + (N.thuong_hieu || "IL SUNG TECH");
   }
   load().then((cfg) => {

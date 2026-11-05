@@ -22,7 +22,8 @@
   const NGUON = { tiktok: "TikTok", zalo: "Zalo", facebook: "Facebook", poster: "Poster", nguoi_quen: "Người quen", khac: "Khác", "": "—" };
   const VT = { san_xuat: "Sản xuất", kho: "Kho", chat_luong: "Chất lượng", bat_ky: "Khác/bất kỳ" };
   const IMG_TYPES = { banner: "Banner chào mừng", nen: "Ảnh nền câu hỏi", logo: "Logo", vi_tri: "Ảnh vị trí / lựa chọn", hoan_thanh: "Ảnh hoàn thành", khac: "Khác" };
-  const TABS = [["dash", "📊", "Dashboard"], ["uv", "👥", "Ứng viên"], ["cd", "🗂", "Chiến dịch"], ["nd", "✏️", "Nội dung"], ["anh", "🖼", "Hình ảnh"], ["ch", "❓", "Câu hỏi"], ["lc", "☑️", "Lựa chọn trả lời"], ["xt", "👁", "Xem trước"], ["xb", "🚀", "Xuất bản"]];
+  const TABS = [["dash", "📊", "Dashboard"], ["uv", "👥", "Ứng viên"], ["cd", "🗂", "Chiến dịch"], ["nd", "✏️", "Nội dung"], ["anh", "🖼", "Hình ảnh"], ["ch", "❓", "Câu hỏi"], ["lc", "☑️", "Lựa chọn trả lời"], ["xt", "👁", "Xem trước"], ["xb", "🚀", "Xuất bản"], ["tk", "🔑", "Tài khoản"]];
+  const NV_TABS = ["dash", "uv"]; // nhan vien tuyen dung chi xem so lieu + xu ly ung vien
 
   const S = { auth: null, cds: [], cd: null, qs: [], delQ: [], dirtyCd: false, imgs: [], tab: "dash", selQ: null, lcQ: null };
 
@@ -79,14 +80,18 @@
     catch (_) { logout(); }
   }
   async function start() {
-    await api("/api/tuyendung/admin/toi");
-    $("#login").hidden = true; $("#shell").hidden = false; $("#meName").textContent = S.auth.name;
-    $("#tabs").innerHTML = TABS.map(([k, i, t]) => `<button type="button" data-t="${k}">${i} ${t}</button>`).join("");
+    const me = await api("/api/tuyendung/admin/toi");
+    S.role = me.vai_tro === undefined ? "quan_tri" : me.vai_tro || "nhan_vien"; S.meId = me.id; S.superuser = !!me.superuser; // server cu chua co vai tro -> toan quyen nhu truoc
+    const full = S.role === "quan_tri";
+    document.body.classList.toggle("nv", !full);
+    $("#login").hidden = true; $("#shell").hidden = false; $("#meName").textContent = S.auth.name + (full ? "" : " · Nhân viên");
+    $("#tabs").innerHTML = TABS.filter(([k]) => full || NV_TABS.indexOf(k) >= 0).map(([k, i, t]) => `<button type="button" data-t="${k}">${i} ${t}</button>`).join("");
     $$("#tabs button").forEach((b) => b.addEventListener("click", () => tab(b.dataset.t)));
     await loadCds();
     const last = LS.get("td_admin_cd");
     await pickCd(S.cds.find((c) => c.id === last) ? last : (S.cds.find((c) => c.mac_dinh) || S.cds[0] || {}).id);
-    tab(LS.get("td_admin_tab") || "dash");
+    const lt = LS.get("td_admin_tab");
+    tab(full || NV_TABS.indexOf(lt) >= 0 ? lt || "dash" : "dash");
   }
 
   // ================= chien dich hien tai =================
@@ -114,7 +119,7 @@
 
   async function pubState() {
     const p = $("#pubState");
-    if (!S.cd) { p.textContent = ""; return; }
+    if (!S.cd || S.role !== "quan_tri") { p.textContent = ""; return; }
     if (dirty()) { p.className = "pill warn"; p.textContent = "● Có thay đổi chưa lưu"; return; }
     if (!S.cd.so_phien_ban) { p.className = "pill off"; p.textContent = "Bản nháp – chưa xuất bản"; return; }
     const changed = await draftChanged();
@@ -174,12 +179,13 @@
 
   // ================= tab =================
   function tab(t) {
+    if (S.role !== "quan_tri" && NV_TABS.indexOf(t) < 0) t = "dash";
     S.tab = t; LS.set("td_admin_tab", t);
     $$("#tabs button").forEach((b) => b.classList.toggle("on", b.dataset.t === t));
     const v = $("#view"); v.innerHTML = "";
     const needCd = ["nd", "ch", "lc", "xt", "xb"];
     if (needCd.indexOf(t) >= 0 && !S.cd) { v.innerHTML = `<div class="card empty">Chưa có chiến dịch. Vào <b>Chiến dịch</b> để tạo mới.</div>`; return; }
-    ({ dash: vDash, uv: vUv, cd: vCd, nd: vNd, anh: vAnh, ch: vCh, lc: vLc, xt: vXt, xb: vXb })[t](v);
+    ({ dash: vDash, uv: vUv, cd: vCd, nd: vNd, anh: vAnh, ch: vCh, lc: vLc, xt: vXt, xb: vXb, tk: vTk })[t](v);
   }
 
   // ================= DASHBOARD =================
@@ -382,13 +388,16 @@
         <div style="margin-top:12px"><label>Lời nhắn hoàn thành (mỗi dòng)</label><div id="eHt"></div></div></div>
       <div class="card"><h3>Giao diện</h3><div class="grid g4">
         <label>Màu chủ đạo (navy)<div class="row" style="margin-top:5px"><input type="color" data-g="mau_chinh"><input data-g2="mau_chinh" style="width:110px"></div></label>
-        <label>Màu nhấn (xanh dương)<div class="row" style="margin-top:5px"><input type="color" data-g="mau_nhan"><input data-g2="mau_nhan" style="width:110px"></div></label></div>
+        <label>Màu nhấn (xanh dương)<div class="row" style="margin-top:5px"><input type="color" data-g="mau_nhan"><input data-g2="mau_nhan" style="width:110px"></div></label>
+        <label class="chk" style="align-self:end;min-height:38px"><input type="checkbox" id="anLogo"> Ẩn logo (chỉ hiện tên thương hiệu)</label></div>
         <div class="grid g2" style="margin-top:14px">${[["logo", "Logo (thay chữ trên thanh đầu)"], ["banner", "Ảnh banner chào mừng (toàn màn hình)"], ["nen", "Ảnh nền câu hỏi (mờ)"], ["hoan_thanh", "Ảnh màn hình hoàn thành"]].map(([k, t]) => `<div><label>${t}</label><div class="slot" style="margin-top:6px"><div class="pv" data-pv="${k}"></div><div class="row"><button class="b sm" type="button" data-pick="${k}">Chọn ảnh</button><button class="b sm dan" type="button" data-clr="${k}">Gỡ</button></div></div></div>`).join("")}</div></div>`;
     $$("[data-n]", v).forEach((i) => { i.value = N[i.dataset.n] || ""; i.addEventListener("input", () => { N[i.dataset.n] = i.value; markCd(); }); });
     $$("[data-h]", v).forEach((i) => { i.value = N.hoan_thanh[i.dataset.h] || ""; i.addEventListener("input", () => { N.hoan_thanh[i.dataset.h] = i.value; markCd(); }); });
     $$("[data-m]", v).forEach((i) => { i.value = N.mxh[i.dataset.m] || ""; i.addEventListener("input", () => { N.mxh[i.dataset.m] = i.value.trim(); markCd(); }); });
     $$("[data-g]", v).forEach((i) => { const k = i.dataset.g, t = $(`[data-g2="${k}"]`, v); i.value = t.value = G[k] || "#0b2f6b";
       i.addEventListener("input", () => { G[k] = t.value = i.value; markCd(); }); t.addEventListener("input", () => { if (/^#[0-9a-f]{6}$/i.test(t.value)) { G[k] = i.value = t.value; markCd(); } }); });
+    $("#anLogo").checked = !!N.an_logo;
+    $("#anLogo").addEventListener("change", (e) => { N.an_logo = e.target.checked; markCd(); });
     $("#eKh").appendChild(listEditor(N.khau_hieu, null, markCd));
     $("#eDn").appendChild(listEditor(N.diem_nhan, null, markCd));
     $("#eQl").appendChild(listEditor(N.quyen_loi, [{ k: "icon", ph: "Biểu tượng", w: "70px" }, { k: "tieu_de", ph: "Tiêu đề" }, { k: "mo_ta", ph: "Mô tả" }], markCd));
@@ -659,10 +668,70 @@
     } catch (e) { fail(e); }
   }
 
+  // ================= TAI KHOAN =================
+  const VAI_TRO = { quan_tri: "Quản trị (toàn quyền)", nhan_vien: "Nhân viên tuyển dụng (Dashboard + Ứng viên)" };
+  const genPass = () => { const a = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789", r = crypto.getRandomValues(new Uint8Array(10)); return Array.from(r, (x) => a[x % a.length]).join(""); };
+  function showPass(email, pass) {
+    openModal("Thông tin đăng nhập", `<p>Gửi cho nhân viên <b>trực tiếp</b> (Zalo riêng / giấy), không đăng lên nhóm chung. Mật khẩu chỉ hiện <b>một lần</b>.</p>
+      <div class="kv" style="margin:12px 0"><span>Trang</span><b>${esc(location.origin + location.pathname)}</b><span>Email</span><b>${esc(email)}</b><span>Mật khẩu</span><b style="font-size:18px;letter-spacing:.05em">${esc(pass)}</b></div>
+      <button class="b pri" type="button" id="cpP">📋 Copy toàn bộ</button>`);
+    $("#cpP").addEventListener("click", () => navigator.clipboard.writeText(`Trang quản trị tuyển dụng: ${location.origin + location.pathname}\nEmail: ${email}\nMật khẩu: ${pass}\n(Đổi mật khẩu sau khi đăng nhập: bấm "Đổi mật khẩu" góc dưới bên trái)`).then(() => toast("Đã copy", "ok")));
+  }
+  async function vTk(v) {
+    v.innerHTML = `<div class="h"><h2>Tài khoản tuyển dụng</h2></div>
+      <div class="card"><h3>Thêm tài khoản</h3><div class="grid g4">
+        <label>Họ tên<input id="nTen" placeholder="Nguyễn Thị A"></label>
+        <label>Email đăng nhập<input id="nEmail" type="email" placeholder="ten@il-sungtech.com"></label>
+        <label>Vai trò<select id="nVt">${Object.entries(VAI_TRO).map(([k, t]) => `<option value="${k}" ${k === "nhan_vien" ? "selected" : ""}>${t}</option>`).join("")}</select></label>
+        <label>Mật khẩu (tự tạo)<div class="row" style="margin-top:5px;flex-wrap:nowrap"><input id="nPass"><button class="b sm" type="button" id="nGen" title="Tạo mật khẩu khác">⟳</button></div></label></div>
+        <div class="row" style="margin-top:12px"><button class="b pri" type="button" id="nAdd">＋ Tạo tài khoản</button><span class="mut small">Nhân viên tuyển dụng chỉ xem Dashboard và xử lý Ứng viên, không sửa được form.</span></div></div>
+      <div id="tkList"><div class="card empty">Đang tải…</div></div>`;
+    $("#nPass").value = genPass();
+    $("#nGen").addEventListener("click", () => ($("#nPass").value = genPass()));
+    $("#nAdd").addEventListener("click", async () => {
+      const email = $("#nEmail").value.trim(), pass = $("#nPass").value, ho_ten = $("#nTen").value.trim();
+      if (!/^\S+@\S+\.\S+$/.test(email)) return toast("Email chưa đúng", "err");
+      if (pass.length < 8) return toast("Mật khẩu cần ít nhất 8 ký tự", "err");
+      try { await api(rec("tuyendung_quantri"), { method: "POST", body: { email, password: pass, passwordConfirm: pass, ho_ten, vai_tro: $("#nVt").value } }); showPass(email, pass); $("#nEmail").value = $("#nTen").value = ""; $("#nPass").value = genPass(); draw(); }
+      catch (e) { if (e.detail && /email/i.test(e.detail)) e.detail = "Email đã có tài khoản hoặc không hợp lệ"; fail(e); }
+    });
+    const draw = async () => {
+      try {
+        const list = await listAll("tuyendung_quantri", "", "email");
+        $("#tkList").innerHTML = `<div class="tblw"><table class="tbl"><thead><tr><th>Họ tên</th><th>Email</th><th>Vai trò</th><th></th></tr></thead><tbody>${list.map((u) => `<tr data-id="${u.id}">
+          <td><input data-ten value="${esc(u.ho_ten)}" style="min-width:160px"></td><td>${esc(u.email)}${u.id === S.meId ? ' <span class="badge map">bạn</span>' : ""}</td>
+          <td><select data-vt>${Object.entries(VAI_TRO).map(([k, t]) => `<option value="${k}" ${u.vai_tro === k ? "selected" : ""}>${t.split(" (")[0]}</option>`).join("")}</select></td>
+          <td class="row" style="flex-wrap:nowrap"><button class="b sm" data-rs type="button">Đặt lại mật khẩu</button><button class="b sm dan" data-del type="button" ${u.id === S.meId ? "disabled" : ""}>Xoá</button></td></tr>`).join("")}</tbody></table></div>`;
+        $$("tr[data-id]", $("#tkList")).forEach((tr) => {
+          const u = list.find((x) => x.id === tr.dataset.id);
+          $("[data-ten]", tr).addEventListener("change", (e) => api(rec("tuyendung_quantri", u.id), { method: "PATCH", body: { ho_ten: e.target.value } }).then(() => toast("Đã lưu", "ok")).catch(fail));
+          $("[data-vt]", tr).addEventListener("change", (e) => api(rec("tuyendung_quantri", u.id), { method: "PATCH", body: { vai_tro: e.target.value } }).then(() => toast("Đã đổi vai trò", "ok")).catch((er) => { fail(er); draw(); }));
+          $("[data-rs]", tr).addEventListener("click", async () => { if (!confirm("Đặt mật khẩu mới cho " + u.email + "? Mật khẩu cũ sẽ không dùng được nữa.")) return; const p = genPass();
+            try { await api(rec("tuyendung_quantri", u.id), { method: "PATCH", body: { password: p, passwordConfirm: p } }); if (u.id === S.meId) { toast("Đã đổi mật khẩu của bạn – vui lòng đăng nhập lại", "ok"); showPass(u.email, p); setTimeout(logout, 100); return; } showPass(u.email, p); } catch (e) { fail(e); } });
+          $("[data-del]", tr).addEventListener("click", async () => { if (!confirm("Xoá tài khoản " + u.email + "?")) return; try { await api(rec("tuyendung_quantri", u.id), { method: "DELETE" }); toast("Đã xoá", "ok"); draw(); } catch (e) { fail(e); } });
+        });
+      } catch (e) { fail(e); }
+    };
+    draw();
+  }
+  // doi mat khau cua chinh minh
+  $("#chPass").addEventListener("click", () => {
+    if (!S.auth || S.auth.col !== "tuyendung_quantri") return toast("Tài khoản superuser đổi mật khẩu trong trang quản trị ORG (/_/).", "");
+    openModal("Đổi mật khẩu", `<div class="grid"><label>Mật khẩu hiện tại<input type="password" id="cpO" autocomplete="current-password"></label><label>Mật khẩu mới (≥ 8 ký tự)<input type="password" id="cpN" autocomplete="new-password"></label><label>Nhập lại mật khẩu mới<input type="password" id="cpN2" autocomplete="new-password"></label><button class="b pri" type="button" id="cpGo">Đổi mật khẩu</button></div>`);
+    $("#cpGo").addEventListener("click", async () => {
+      const o = $("#cpO").value, n = $("#cpN").value;
+      if (n.length < 8) return toast("Mật khẩu mới cần ít nhất 8 ký tự", "err");
+      if (n !== $("#cpN2").value) return toast("Hai lần nhập mật khẩu mới chưa khớp", "err");
+      try { await api(rec("tuyendung_quantri", S.meId), { method: "PATCH", body: { oldPassword: o, password: n, passwordConfirm: n } }); closeModal(); toast("Đã đổi mật khẩu – vui lòng đăng nhập lại", "ok"); logout(); }
+      catch (e) { if (e.detail && /oldPassword/.test(e.detail)) e.detail = "Mật khẩu hiện tại chưa đúng"; fail(e); }
+    });
+  });
+
   // Logo that: lay logo cua chien dich dang chay (Admin > Noi dung > Logo, sau khi Xuat ban)
   async function brandLogo() {
     try {
       const j = await (await fetch(API + "/api/tuyendung/form?t=" + Date.now(), { cache: "no-store" })).json();
+      if (j && j.noi_dung && j.noi_dung.an_logo) { $$(".lbrand .mark, .sbrand .mark, .lbrand .blogo, .sbrand .blogo").forEach((m) => m.remove()); return; }
       const lg = j && j.giao_dien && j.giao_dien.anh && j.giao_dien.anh.logo;
       if (!lg || !lg.url) return;
       const src = /^https?:/.test(lg.url) ? lg.url : API + lg.url;

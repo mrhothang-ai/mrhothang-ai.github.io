@@ -653,11 +653,23 @@
       $("#pPv").addEventListener("click", () => tab("xt"));
       $("#pGo").addEventListener("click", async () => {
         if (!confirm("Xuất bản phiên bản mới? Ứng viên sẽ thấy ngay nội dung này" + (S.cd.hoat_dong ? "." : " (khi chiến dịch được bật Hoạt động)."))) return;
-        try { const r = await api("/api/tuyendung/admin/xuat-ban/" + S.cd.id, { method: "POST" }); toast("Đã xuất bản phiên bản " + r.so, "ok"); await loadCds(); await pickCd(S.cd.id); vXb(v); }
+        try { const r = await api("/api/tuyendung/admin/xuat-ban/" + S.cd.id, { method: "POST" }); toast("Đã xuất bản phiên bản " + r.so, "ok"); brandLogo(); await loadCds(); await pickCd(S.cd.id); vXb(v); }
         catch (e) { fail(e); }
       });
     } catch (e) { fail(e); }
   }
 
+  // Logo that: lay logo cua chien dich dang chay (Admin > Noi dung > Logo, sau khi Xuat ban)
+  async function brandLogo() {
+    try {
+      const j = await (await fetch(API + "/api/tuyendung/form?t=" + Date.now(), { cache: "no-store" })).json();
+      const lg = j && j.giao_dien && j.giao_dien.anh && j.giao_dien.anh.logo;
+      if (!lg || !lg.url) return;
+      const src = /^https?:/.test(lg.url) ? lg.url : API + lg.url;
+      $$(".lbrand .mark, .sbrand .mark, .lbrand .blogo, .sbrand .blogo").forEach((m) => { const im = document.createElement("img"); im.className = "blogo"; im.alt = "Logo"; im.src = src + (src.indexOf("?") < 0 ? "?t=" : "&t=") + Date.now(); m.replaceWith(im); });
+      $(".lbrand").childNodes.forEach((n) => { if (n.nodeType === 3) n.textContent = ""; });
+    } catch (_) {}
+  }
+  brandLogo();
   boot();
 })();

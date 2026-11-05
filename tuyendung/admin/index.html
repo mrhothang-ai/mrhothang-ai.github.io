@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Quản trị tuyển dụng – IL SUNG TECH</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="admin.css">
+</head>
+<body>
+<div id="login" class="login" hidden>
+  <form class="lbox" id="lform">
+    <div class="lbrand"><span class="mark"></span> IL SUNG TECH</div>
+    <h1>Quản trị tuyển dụng</h1>
+    <p class="mut">Đăng nhập bằng tài khoản Admin tuyển dụng.</p>
+    <label>Email<input type="email" id="lemail" autocomplete="username" required></label>
+    <label>Mật khẩu<input type="password" id="lpass" autocomplete="current-password" required></label>
+    <div class="err" id="lerr"></div>
+    <button class="b pri big" type="submit" id="lbtn">Đăng nhập</button>
+    <p class="mut small">Chưa có tài khoản? Quản trị viên hệ thống tạo trong PocketBase: Collections ▸ <b>tuyendung_quantri</b> ▸ New record.</p>
+  </form>
+</div>
+
+<div id="shell" class="shell" hidden>
+  <aside class="side">
+    <div class="sbrand"><span class="mark"></span><div><b>IL SUNG TECH</b><small>Quản trị tuyển dụng</small></div></div>
+    <nav id="tabs" class="tabs" aria-label="Chức năng"></nav>
+    <div class="me"><span id="meName"></span><button class="b link" id="logout" type="button">Đăng xuất</button></div>
+  </aside>
+  <main class="main">
+    <header class="bar">
+      <label class="cdsel">Chiến dịch <select id="cdSel"></select></label>
+      <span class="pill" id="pubState"></span>
+      <div class="acts">
+        <button class="b" id="bSave" type="button">💾 Lưu nháp</button>
+        <button class="b" id="bPrev" type="button">👁 Xem trước</button>
+        <button class="b pri" id="bPub" type="button">🚀 Xuất bản</button>
+      </div>
+    </header>
+    <section id="view" class="view"></section>
+  </main>
+</div>
+<div id="modal" class="modal" hidden><div class="mbox" role="dialog" aria-modal="true"><div class="mhead"><b id="mTitle"></b><button class="b link" id="mClose" type="button" aria-label="Đóng">✕</button></div><div id="mBody"></div></div></div>
+<div id="toasts" class="toasts" aria-live="polite"></div>
+<script src="admin.js"></script>
+</body>
+</html>
